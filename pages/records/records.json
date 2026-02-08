@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "垂钓记录",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "van-nav-bar": "@vant/weapp/nav-bar/index"
+  }
+}

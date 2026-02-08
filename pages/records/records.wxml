@@ -1,0 +1,66 @@
+<!--pages/records/records.wxml-->
+<van-nav-bar
+  title="垂钓记录"
+  right-text="添加"
+  left-arrow="{{false}}"
+  bind:click-left="onClickLeft"
+  bind:click-right="onClickRight"
+  fixed="{{true}}"
+  placeholder="{{true}}"
+/>
+<view class="container">
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stat-item">
+      <text class="stat-value">{{totalRecords}}</text>
+      <text class="stat-label">总记录</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{totalWeight}}</text>
+      <text class="stat-label">总重量</text>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="records-section">
+    <view class="section-header">
+      <text class="section-title">垂钓记录</text>
+      <view class="add-btn" bindtap="onAddRecord">
+        <text>+</text>
+      </view>
+    </view>
+
+    <view class="records-list" wx:if="{{records.length > 0}}">
+      <view 
+        class="record-item" 
+        wx:for="{{records}}" 
+        wx:key="id"
+        bindtap="onRecordTap"
+        data-record="{{item}}"
+      >
+        <view class="record-image">
+          <text class="image-placeholder">🐟</text>
+        </view>
+        <view class="record-info">
+          <view class="record-header">
+            <text class="record-date">{{item.date}}</text>
+            <text class="record-weather">{{item.weather}}</text>
+          </view>
+          <text class="record-spot">📍 {{item.spotName}}</text>
+          <view class="record-details">
+            <text class="detail-item">鱼种：{{item.fishType}}</text>
+            <text class="detail-item">重量：{{item.weight}}</text>
+            <text class="detail-item">时长：{{item.duration}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">📝</text>
+      <text class="empty-text">暂无垂钓记录</text>
+      <text class="empty-tip">快去添加你的第一条记录吧~</text>
+    </view>
+  </view>
+</view>

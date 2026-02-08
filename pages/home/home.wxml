@@ -1,0 +1,259 @@
+<!--pages/home/home.wxml-->
+<!-- 自定义导航栏 -->
+<nav-bar 
+  searchBar="{{true}}"
+  showaw="{{true}}"
+  address="{{currentRegion}}"
+  weather="{{weatherDisplay}}"
+  searchText="搜索商品、钓场..."
+  background="rgba(255, 255, 255, 0.95)"
+  bind:search="onSearch"
+  bind:weather="onWeatherTap"
+/>
+
+<view class="container">
+  <!-- 轮播图（包含排行榜） -->
+  <swiper 
+    class="banner-swiper" 
+    indicator-dots="{{true}}" 
+    autoplay="{{true}}" 
+    interval="4000" 
+    duration="500" 
+    bindchange="onBannerChange"
+    circular="{{true}}"
+  >
+    <swiper-item wx:for="{{bannerList}}" wx:key="id">
+      <!-- 普通轮播图 -->
+      <view class="banner-item" wx:if="{{item.type === 'banner'}}">
+        <text class="banner-title">{{item.title}}</text>
+      </view>
+      
+      <!-- 排行榜轮播图 -->
+      <view class="ranking-banner" wx:if="{{item.type === 'ranking'}}">
+        <view class="ranking-header">
+          <text class="ranking-title">🏆 {{item.title}}</text>
+        </view>
+        <view class="ranking-list">
+          <view 
+            class="ranking-item {{item.rank === 1 ? 'rank-first' : ''}}"
+            wx:for="{{item.rankings}}" 
+            wx:key="rank"
+            wx:for-item="rankItem"
+          >
+            <view class="rank-number">{{rankItem.rank}}</view>
+            <view class="rank-info">
+              <text class="rank-name">{{rankItem.name}}</text>
+              <text class="rank-spot">{{rankItem.spot}}</text>
+            </view>
+            <text class="rank-weight">{{rankItem.weight}}</text>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 天气信息卡片 -->
+  <view class="weather-card">
+    <view class="weather-main">
+      <view class="weather-left">
+        <text class="temperature">{{weather.temperature}}°</text>
+        <text class="weather-type">{{weather.weatherType}}</text>
+      </view>
+      <view class="weather-icon">☀️</view>
+    </view>
+    <view class="weather-details">
+      <view class="weather-item">
+        <text class="weather-label">气压</text>
+        <text class="weather-value">{{weather.hpa}}hPa</text>
+      </view>
+      <view class="weather-item">
+        <text class="weather-label">湿度</text>
+        <text class="weather-value">{{weather.humidity}}%</text>
+      </view>
+      <view class="weather-item">
+        <text class="weather-label">风速</text>
+        <text class="weather-value">{{weather.windSpeed}}m/s</text>
+      </view>
+      <view class="weather-item">
+        <text class="weather-label">风向</text>
+        <text class="weather-value">{{weather.windDirection}}</text>
+      </view>
+      <view class="weather-item">
+        <text class="weather-label">能见度</text>
+        <text class="weather-value">{{weather.visibility}}km</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="function-entry">
+    <view 
+      class="entry-item" 
+      wx:for="{{functionList}}" 
+      wx:key="id"
+      bindtap="onFunctionTap"
+      data-function="{{item}}"
+    >
+      <view class="entry-icon-wrapper entry-bg-{{item.id}}">
+        <text class="entry-icon">{{item.icon}}</text>
+      </view>
+      <text class="entry-text">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 商城推荐 -->
+  <view class="section shop-section">
+    <view class="section-header">
+      <text class="section-title">🛒 热门商品</text>
+      <text class="section-more" bindtap="onMoreTap" data-type="shop">更多 ></text>
+    </view>
+    <swiper 
+      class="shop-swiper" 
+      autoplay="{{true}}" 
+      interval="3000" 
+      duration="500"
+      circular="{{true}}"
+      display-multiple-items="{{2.1}}"
+      previous-margin="0"
+      next-margin="0"
+      bindchange="onShopSwiperChange"
+    >
+      <swiper-item wx:for="{{shopList}}" wx:key="id">
+        <view 
+          class="shop-item" 
+          bindtap="onShopTap"
+          data-shop="{{item}}"
+        >
+          <view class="shop-image">
+            <text class="image-placeholder">🛍️</text>
+          </view>
+          <text class="shop-name">{{item.name}}</text>
+          <text class="shop-price">¥{{item.price}}</text>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 住宿推荐 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">🏨 附近住宿</text>
+      <text class="section-more" bindtap="onMoreTap" data-type="hotel">更多 ></text>
+    </view>
+    <view class="hotel-list">
+      <view 
+        class="hotel-item" 
+        wx:for="{{hotelList}}" 
+        wx:key="id"
+        bindtap="onHotelTap"
+        data-hotel="{{item}}"
+      >
+        <view class="hotel-image">
+          <text class="image-placeholder">🏨</text>
+        </view>
+        <view class="hotel-content">
+          <view class="hotel-header">
+            <text class="hotel-name">{{item.name}}</text>
+            <view class="hotel-rating">
+              <text class="rating-star">⭐</text>
+              <text class="rating-value">{{item.rating}}</text>
+            </view>
+          </view>
+          <text class="hotel-distance">📍 距离：{{item.distance}}</text>
+          <text class="hotel-address">{{item.address}}</text>
+          <view class="hotel-footer">
+            <text class="hotel-price">¥{{item.price}}/晚</text>
+            <view class="hotel-tags">
+              <text class="hotel-tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 优质钓场推荐 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">⭐ 优质钓场推荐</text>
+      <text class="section-more" bindtap="onMoreTap" data-type="spot">更多 ></text>
+    </view>
+    
+    <view class="spots-list">
+      <view 
+        class="spot-item" 
+        wx:for="{{recommendedSpots}}" 
+        wx:key="id"
+        bindtap="onSpotTap"
+        data-spot="{{item}}"
+      >
+        <view class="spot-image">
+          <text class="image-placeholder">🎣</text>
+        </view>
+        <view class="spot-content">
+          <view class="spot-header">
+            <text class="spot-name">{{item.name}}</text>
+            <view class="spot-rating">
+              <text class="rating-star">⭐</text>
+              <text class="rating-value">{{item.rating}}</text>
+            </view>
+          </view>
+          <text class="spot-distance">📍 距离：{{item.distance}}</text>
+          <text class="spot-address">{{item.address}}</text>
+          
+          <!-- 标签 -->
+          <view class="spot-tags">
+            <view class="tag-item" wx:if="{{item.tags.indexOf('wifi') !== -1}}">
+              <text class="tag-icon">📶</text>
+              <text class="tag-text">WiFi</text>
+            </view>
+            <view class="tag-item" wx:if="{{item.tags.indexOf('parking') !== -1}}">
+              <text class="tag-icon">🅿️</text>
+              <text class="tag-text">停车场</text>
+            </view>
+            <view class="tag-item" wx:if="{{item.tags.indexOf('toilet') !== -1}}">
+              <text class="tag-icon">🚻</text>
+              <text class="tag-text">卫生间</text>
+            </view>
+          </view>
+          
+          <!-- 操作按钮 -->
+          <view class="spot-actions">
+            <view class="action-btn phone-btn" bindtap="onCallPhone" data-phone="{{item.phone}}" catchtap="true">
+              <image class="btn-icon-img" src="/images/icons/phone.png" mode="aspectFit" wx:if="{{iconPhone}}"></image>
+              <text class="btn-icon" wx:else>📞</text>
+              <text class="btn-text">电话</text>
+            </view>
+            <view class="action-btn navigate-btn" bindtap="onNavigate" data-spot="{{item}}" catchtap="true">
+              <text class="btn-icon">🧭</text>
+              <text class="btn-text">导航</text>
+            </view>
+            <text class="spot-price">{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 地区选择器 -->
+  <view class="region-picker-mask" wx:if="{{showRegionPicker}}" bindtap="onRegionPickerClose">
+    <view class="region-picker" catchtap="true">
+      <view class="picker-header">
+        <text class="picker-title">选择地区</text>
+        <text class="picker-close" bindtap="onRegionPickerClose">✕</text>
+      </view>
+      <view class="picker-content">
+        <view 
+          class="picker-item" 
+          wx:for="{{regionList}}" 
+          wx:key="*this"
+          bindtap="onRegionSelect"
+          data-region="{{item}}"
+        >
+          <text class="picker-item-text {{currentRegion === item ? 'selected' : ''}}">{{item}}</text>
+          <text class="picker-check" wx:if="{{currentRegion === item}}">✓</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,45 @@
+<!--components/login-modal/login-modal.wxml-->
+<view class="login-modal-mask" wx:if="{{show}}" bindtap="onMaskTap">
+  <view class="login-modal" catchtap="true">
+    <view class="modal-header">
+      <text class="modal-title">欢迎使用</text>
+      <text class="modal-close" bindtap="onClose">✕</text>
+    </view>
+    
+    <view class="modal-content">
+      <view class="login-icon">
+        <text class="icon-emoji">🎣</text>
+      </view>
+      
+      <text class="login-title">垂钓会员中心</text>
+      <text class="login-desc">登录后享受更多专属权益</text>
+      
+      <view class="login-benefits">
+        <view class="benefit-item">
+          <text class="benefit-icon">✓</text>
+          <text class="benefit-text">会员专享折扣</text>
+        </view>
+        <view class="benefit-item">
+          <text class="benefit-icon">✓</text>
+          <text class="benefit-text">积分奖励</text>
+        </view>
+        <view class="benefit-item">
+          <text class="benefit-icon">✓</text>
+          <text class="benefit-text">优先预约钓场</text>
+        </view>
+      </view>
+      
+      <button class="login-btn" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+        <text class="btn-icon">🔐</text>
+        <text class="btn-text">微信一键登录</text>
+      </button>
+      
+      <view class="login-tips">
+        <text class="tips-text">登录即表示同意</text>
+        <text class="tips-link" bindtap="onAgreementTap">《用户协议》</text>
+        <text class="tips-text">和</text>
+        <text class="tips-link" bindtap="onPrivacyTap">《隐私政策》</text>
+      </view>
+    </view>
+  </view>
+</view>

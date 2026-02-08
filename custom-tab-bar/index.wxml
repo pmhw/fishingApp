@@ -1,0 +1,21 @@
+<!--custom-tab-bar/index.wxml-->
+<view class="tab-bar">
+  <view 
+    class="tab-bar-item {{index === selected ? 'active' : ''}} {{index === 2 && index === selected ? 'member-code-active' : ''}}" 
+    wx:for="{{list}}" 
+    wx:key="index"
+    data-path="{{item.pagePath}}" 
+    data-index="{{index}}"
+    bindtap="switchTab"
+  >
+    <!-- 只有会员码选中时才显示圆形背景 -->
+    <view class="tab-icon-wrapper {{index === 2 && index === selected ? 'selected-circle' : ''}}">
+      <image 
+        class="tab-icon" 
+        src="{{index === selected ? item.selectedIconPath : item.iconPath}}"
+        mode="aspectFit"
+      />
+    </view>
+    <text class="tab-text" style="color: {{index === selected ? selectedColor : color}}">{{item.text}}</text>
+  </view>
+</view>

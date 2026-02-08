@@ -1,0 +1,84 @@
+/* custom-tab-bar/index.wxss */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 98rpx;
+  background-color: #ffffff;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 999;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.1);
+  align-items: center;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.tab-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-bottom: 8rpx;
+}
+
+/* 会员码选中时的特殊样式 */
+.tab-bar-item.member-code-active {
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 0;
+}
+
+.tab-icon-wrapper {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6rpx;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* 只有会员码选中时才显示圆形背景 */
+.tab-icon-wrapper.selected-circle {
+  width: 100rpx;
+  height: 100rpx;
+  background-color: #667eea;
+  border-radius: 50%;
+  margin-bottom: -30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.3);
+  transform: translateY(-25rpx);
+  z-index: 10;
+}
+
+.tab-icon {
+  width: 48rpx;
+  height: 48rpx;
+  transition: all 0.3s ease;
+}
+
+.tab-icon-wrapper.selected-circle .tab-icon {
+  width: 60rpx;
+  height: 60rpx;
+  filter: brightness(0) invert(1); /* 图标变白色 */
+}
+
+.tab-text {
+  font-size: 22rpx;
+  color: #7A7E83;
+  transition: all 0.3s ease;
+}
+
+.tab-bar-item.active .tab-text {
+  color: #667eea;
+  font-weight: bold;
+}
+
+/* 会员码选中时文字隐藏或调整 */
+.tab-bar-item.member-code-active .tab-text {
+  margin-top: 0;
+  color: #667eea;
+}

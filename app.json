@@ -1,12 +1,53 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/logs/logs"
+    "pages/home/home",
+    "pages/nearby/nearby",
+    "pages/member-code/member-code",
+    "pages/records/records",
+    "pages/profile/profile"
   ],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Weixin",
     "navigationBarBackgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#667eea",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/nearby/nearby",
+        "iconPath": "images/tabbar/nearby.png",
+        "selectedIconPath": "images/tabbar/nearby-active.png",
+        "text": "附近钓场"
+      },
+      {
+        "pagePath": "pages/member-code/member-code",
+        "iconPath": "images/tabbar/member.png",
+        "selectedIconPath": "images/tabbar/member-active.png",
+        "text": "会员码"
+      },
+      {
+        "pagePath": "pages/records/records",
+        "iconPath": "images/tabbar/records.png",
+        "selectedIconPath": "images/tabbar/records-active.png",
+        "text": "垂钓记录"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "iconPath": "images/tabbar/profile.png",
+        "selectedIconPath": "images/tabbar/profile-active.png",
+        "text": "个人中心"
+      }
+    ]
   },
   "style": "v2",
   "componentFramework": "glass-easel",

@@ -1,0 +1,98 @@
+<!--pages/member-code/member-code.wxml-->
+<view class="container">
+  <!-- 顶部Header -->
+  <!-- <view class="top-header">
+    <view class="header-content">
+      <text class="header-title">垂钓会员码</text>
+      <view class="header-actions">
+        <text class="header-icon">🔊</text>
+        <text class="header-icon">⋯</text>
+        <text class="header-icon">🎯</text>
+      </view>
+    </view>
+  </view> -->
+
+  <!-- 主卡片 -->
+  <view class="main-card">
+    <!-- 标题区域 -->
+    <view class="card-title-section">
+      <text class="card-title">垂钓会员码</text>
+      <text class="card-subtitle">电子票</text>
+    </view>
+
+    <!-- 支持说明 -->
+    <view class="support-info">
+      <text class="check-icon">✓</text>
+      <text class="support-text">支持垂钓场会员服务</text>
+    </view>
+
+    <!-- 二维码区域 -->
+    <view class="qr-code-section">
+      <view class="qr-code-wrapper">
+        <view class="qr-code-main">
+          <!-- 这里可以显示真实的二维码，暂时用占位 -->
+          <view class="qr-code-placeholder">
+            <view class="qr-pattern">
+              <view class="qr-square" wx:for="{{qrPattern}}" wx:key="index" wx:for-item="row">
+                <view class="qr-dot" wx:for="{{row}}" wx:key="index" wx:for-item="cell" wx:for-index="colIndex" style="background-color: {{cell ? '#000' : '#fff'}}"></view>
+              </view>
+            </view>
+            <!-- 中间Logo -->
+            <view class="qr-logo">
+              <text class="logo-icon">🎣</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 刷新按钮 -->
+      <view class="refresh-btn" bindtap="onRefreshQR">
+        <text class="refresh-icon">🔄</text>
+        <text class="refresh-text">点击刷新二维码</text>
+      </view>
+    </view>
+
+    <!-- 警告提示 -->
+    <!-- <view class="warning-section">
+      <text class="warning-icon">⚠️</text>
+      <text class="warning-text">请勿与其他APP/小程序混用 以免重复扣费</text>
+    </view> -->
+
+    <!-- 开通其他服务按钮 -->
+    <!-- <view class="service-btn" bindtap="onOpenService">
+      开通垂钓服务
+    </view> -->
+
+    <!-- 折扣信息 -->
+    <view class="discount-section">
+      <view class="discount-info">
+        <text class="discount-text">当前会员折扣{{discount}}折</text>
+        <text class="consumption-text">本月已消费¥{{monthlyConsumption}}</text>
+      </view>
+      
+      <!-- 折扣进度条 -->
+      <view class="discount-progress">
+        <view class="progress-item {{item.active ? 'active' : ''}}" wx:for="{{discountLevels}}" wx:key="level">
+          <view class="progress-bar" style="width: {{item.width}}%; background-color: {{item.active ? '#4CAF50' : '#E0E0E0'}}"></view>
+          <text class="progress-label">{{item.level}}折</text>
+          <text class="progress-amount">¥{{item.amount}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部导航按钮 -->
+    <view class="bottom-nav">
+      <view class="nav-item" bindtap="onViewTrips">
+        <text class="nav-icon">📋</text>
+        <text class="nav-text">会员中心</text>
+        <text class="nav-arrow">›</text>
+      </view>
+      <view class="nav-divider"></view>
+      <view class="nav-item" bindtap="onViewFAQ">
+        <text class="nav-icon">❓</text>
+        <text class="nav-text">常见问题</text>
+        <text class="nav-arrow">›</text>
+      </view>
+    </view>
+  </view>
+</view>

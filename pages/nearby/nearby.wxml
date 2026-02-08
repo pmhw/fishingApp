@@ -1,0 +1,38 @@
+<!--pages/nearby/nearby.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="header-title">附近钓场</text>
+    <text class="location-tip" wx:if="{{currentLocation}}">📍 已定位</text>
+  </view>
+
+  <view class="spot-list">
+    <view 
+      class="spot-item" 
+      wx:for="{{fishingSpots}}" 
+      wx:key="id"
+      bindtap="onSpotTap"
+      data-spot="{{item}}"
+    >
+      <view class="spot-image">
+        <text class="image-placeholder">🎣</text>
+      </view>
+      <view class="spot-info">
+        <view class="spot-header">
+          <text class="spot-name">{{item.name}}</text>
+          <view class="spot-rating">
+            <text class="rating-star">⭐</text>
+            <text class="rating-value">{{item.rating}}</text>
+          </view>
+        </view>
+        <text class="spot-address">📍 {{item.address}}</text>
+        <text class="spot-distance">距离：{{item.distance}}</text>
+        <view class="spot-footer">
+          <text class="spot-price">{{item.price}}</text>
+          <view class="navigate-btn" bindtap="onNavigate" data-spot="{{item}}" catchtap="true">
+            导航
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

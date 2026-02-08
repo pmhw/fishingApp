@@ -1,0 +1,157 @@
+<!--pages/profile/profile.wxml-->
+<view class="container">
+  <!-- 登录弹窗组件 -->
+  <login-modal 
+    show="{{showLoginModal}}" 
+    autoCheck="{{true}}"
+    bind:login="onLoginSuccess"
+    bind:close="onLoginClose"
+  />
+  
+  <!-- 未登录状态 -->
+  <view class="not-logged-in" wx:if="{{!userInfo}}">
+    <view class="login-prompt">
+      <view class="prompt-icon">🎣</view>
+      <text class="prompt-title">您还未登录</text>
+      <text class="prompt-desc">登录后享受更多专属权益</text>
+      <button class="prompt-btn" bindtap="onShowLogin">立即登录</button>
+    </view>
+  </view>
+  
+  <!-- 已登录状态 -->
+  <block wx:else>
+  <!-- 用户信息区域 -->
+  <view class="user-section">
+    <view class="user-header">
+      <view class="user-main" bindtap="onUserInfoTap">
+        <view class="user-avatar">
+          <view class="avatar-border">
+            <text class="avatar-icon">🎣</text>
+          </view>
+        </view>
+        <view class="user-info">
+          <view class="user-title-row">
+            <text class="user-title">{{userLevel.title}}</text>
+            <view class="level-badge">
+              <text class="level-icon">👑</text>
+              <text class="level-text">{{userLevel.level}}</text>
+            </view>
+          </view>
+          <!-- 积分进度条 -->
+          <view class="points-progress">
+            <view class="progress-label">
+              <text class="label-text">积分值</text>
+              <text class="progress-value">{{userLevel.points}}/{{userLevel.pointsMax}}</text>
+              <text class="arrow-right">›</text>
+            </view>
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{userLevel.pointsPercent}}%"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <!-- 签到按钮 -->
+      <view class="sign-in-btn" bindtap="onSignIn">
+        <text class="sign-text">签到</text>
+        <view class="sign-dot" wx:if="{{canSignIn}}"></view>
+      </view>
+    </view>
+    
+    <!-- 快捷功能入口 -->
+    <view class="quick-actions">
+      <view 
+        class="action-item" 
+        wx:for="{{quickActions}}" 
+        wx:key="id"
+        bindtap="onQuickActionTap"
+        data-action="{{item}}"
+      >
+        <view class="action-icon" style="background: {{item.color}}20">
+          <text class="action-emoji">{{item.icon}}</text>
+        </view>
+        <view class="action-content">
+          <text class="action-title">{{item.title}}</text>
+          <text class="action-desc">{{item.desc}}</text>
+        </view>
+      </view>
+      <view class="action-more">
+        <text class="more-icon">⋯</text>
+        <text class="more-text">更多</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我的资产 -->
+  <view class="assets-section">
+    <view class="section-title">我的资产</view>
+    <view class="assets-grid">
+      <view 
+        class="asset-item" 
+        wx:for="{{assets}}" 
+        wx:key="id"
+        bindtap="onAssetTap"
+        data-asset="{{item}}"
+      >
+        <view class="asset-value-row">
+          <text class="asset-value">{{item.value}}</text>
+          <view class="asset-dot" wx:if="{{item.hasDot}}"></view>
+        </view>
+        <text class="asset-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我的订单 -->
+  <view class="orders-section">
+    <view class="section-title">我的订单</view>
+    <view class="orders-grid">
+      <view 
+        class="order-item" 
+        wx:for="{{orderTypes}}" 
+        wx:key="id"
+        bindtap="onOrderTypeTap"
+        data-type="{{item}}"
+      >
+        <view class="order-icon-wrapper">
+          <text class="order-icon">{{item.icon}}</text>
+          <view class="order-badge" wx:if="{{item.count > 0}}">{{item.count}}</view>
+        </view>
+        <text class="order-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 促销横幅 -->
+  <view class="promotion-banner" bindtap="onPromotionTap">
+    <view class="banner-left">
+      <view class="banner-logo">🎣</view>
+      <view class="banner-content">
+        <text class="banner-title">{{promotionBanner.title}}</text>
+        <text class="banner-subtitle">{{promotionBanner.subtitle}}</text>
+      </view>
+    </view>
+    <view class="banner-right">
+      <view class="banner-btn">{{promotionBanner.buttonText}}</view>
+    </view>
+  </view>
+
+  <!-- 服务与工具 -->
+  <view class="services-section">
+    <view class="section-title">服务与工具</view>
+    <view class="services-grid">
+      <view 
+        class="service-item" 
+        wx:for="{{services}}" 
+        wx:key="id"
+        bindtap="onServiceTap"
+        data-service="{{item}}"
+      >
+        <view class="service-icon" style="background: {{item.color}}20">
+          <text class="service-emoji">{{item.icon}}</text>
+        </view>
+        <text class="service-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+  </block>
+</view>

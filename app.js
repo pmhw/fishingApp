@@ -14,6 +14,7 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    globalSystemInfo: null // navBar组件需要的全局系统信息
   }
 })
