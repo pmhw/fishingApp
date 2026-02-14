@@ -1,0 +1,87 @@
+<!--pages/hotel/hotel.wxml-->
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="search-header">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索住宿名称、地址..." bindinput="onSearchInput" value="{{searchKeyword}}" />
+      <text class="search-clear" wx:if="{{searchKeyword}}" bindtap="onClearSearch">✕</text>
+    </view>
+  </view>
+
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view class="filter-item" bindtap="onFilterTap" data-type="sort">
+      <text class="filter-text">{{sortText}}</text>
+      <text class="filter-arrow">▼</text>
+    </view>
+    <view class="filter-item" bindtap="onFilterTap" data-type="price">
+      <text class="filter-text">{{priceText}}</text>
+      <text class="filter-arrow">▼</text>
+    </view>
+    <view class="filter-item" bindtap="onFilterTap" data-type="distance">
+      <text class="filter-text">{{distanceText}}</text>
+      <text class="filter-arrow">▼</text>
+    </view>
+  </view>
+
+  <!-- 住宿列表 -->
+  <view class="hotel-list">
+    <view 
+      class="hotel-card" 
+      wx:for="{{displayHotels}}" 
+      wx:key="id"
+      bindtap="onHotelTap"
+      data-hotel="{{item}}"
+    >
+      <view class="hotel-image-wrapper">
+        <view class="hotel-image">
+          <text class="image-placeholder">🏨</text>
+        </view>
+        <view class="hotel-rating-badge">
+          <text class="rating-star">⭐</text>
+          <text class="rating-value">{{item.rating}}</text>
+        </view>
+      </view>
+      
+      <view class="hotel-content">
+        <view class="hotel-header">
+          <text class="hotel-name">{{item.name}}</text>
+          <text class="hotel-distance">📍 {{item.distance}}</text>
+        </view>
+        
+        <text class="hotel-address">{{item.address}}</text>
+        
+        <!-- 标签 -->
+        <view class="hotel-tags">
+          <view class="tag-item" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">
+            <text class="tag-text">{{tag}}</text>
+          </view>
+        </view>
+        
+        <!-- 底部信息 -->
+        <view class="hotel-footer">
+          <view class="hotel-price-wrapper">
+            <text class="price-symbol">¥</text>
+            <text class="hotel-price">{{item.price}}</text>
+            <text class="price-unit">/晚</text>
+          </view>
+          <view class="hotel-actions">
+            <view class="action-btn call-btn" bindtap="onCallPhone" data-phone="{{item.phone}}" catchtap="true">
+              <text class="btn-icon">📞</text>
+            </view>
+            <view class="action-btn navigate-btn" bindtap="onNavigate" data-hotel="{{item}}" catchtap="true">
+              <text class="btn-icon">🧭</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{displayHotels.length === 0}}">
+    <text class="empty-icon">🏨</text>
+    <text class="empty-text">暂无住宿信息</text>
+  </view>
+</view>

@@ -1,0 +1,129 @@
+<!--pages/product-detail/product-detail.wxml-->
+<view class="container">
+  <!-- 商品图片轮播 -->
+  <swiper 
+    class="product-swiper" 
+    indicator-dots="{{true}}" 
+    autoplay="{{false}}" 
+    interval="5000" 
+    duration="500"
+    circular="{{true}}"
+  >
+    <swiper-item wx:for="{{product.images}}" wx:key="index">
+      <view class="swiper-image">
+        <text class="image-placeholder">🛍️</text>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 商品基本信息 -->
+  <view class="product-info">
+    <view class="price-section">
+      <text class="price-symbol">¥</text>
+      <text class="product-price">{{product.price}}</text>
+      <text class="original-price" wx:if="{{product.originalPrice}}">¥{{product.originalPrice}}</text>
+    </view>
+    <text class="product-name">{{product.name}}</text>
+    <text class="product-subtitle" wx:if="{{product.subtitle}}">{{product.subtitle}}</text>
+  </view>
+
+  <!-- 商品标签 -->
+  <view class="product-tags" wx:if="{{product.tags && product.tags.length > 0}}">
+    <view class="tag-item" wx:for="{{product.tags}}" wx:key="*this" wx:for-item="tag">
+      <text class="tag-text">{{tag}}</text>
+    </view>
+  </view>
+
+  <!-- 规格选择 -->
+  <view class="spec-section" bindtap="onSpecTap">
+    <view class="spec-label">
+      <text class="label-text">选择规格</text>
+      <text class="spec-value">{{selectedSpec || '请选择规格'}}</text>
+    </view>
+    <text class="arrow-right">></text>
+  </view>
+
+  <!-- 数量选择 -->
+  <view class="quantity-section">
+    <text class="quantity-label">数量</text>
+    <view class="quantity-control">
+      <view class="quantity-btn minus" bindtap="onQuantityChange" data-type="minus">
+        <text class="btn-text">-</text>
+      </view>
+      <input class="quantity-input" type="number" value="{{quantity}}" bindinput="onQuantityInput" />
+      <view class="quantity-btn plus" bindtap="onQuantityChange" data-type="plus">
+        <text class="btn-text">+</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品详情 -->
+  <view class="detail-section">
+    <view class="section-title">商品详情</view>
+    <view class="detail-content">
+      <text class="detail-text">{{product.description || '暂无详情'}}</text>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar">
+    <view class="bar-left">
+      <view class="bar-btn contact-btn" bindtap="onContact">
+        <text class="btn-icon">💬</text>
+        <text class="btn-text">客服</text>
+      </view>
+      <view class="bar-btn cart-btn" bindtap="onAddToCart">
+        <text class="btn-icon">🛒</text>
+        <text class="btn-text">购物车</text>
+      </view>
+    </view>
+    <view class="bar-right">
+      <view class="buy-btn add-cart" bindtap="onAddToCart">
+        <text class="btn-text">加入购物车</text>
+      </view>
+      <view class="buy-btn buy-now" bindtap="onBuyNow">
+        <text class="btn-text">立即购买</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 规格选择弹窗 -->
+  <view class="spec-modal" wx:if="{{showSpecModal}}" bindtap="onSpecModalClose">
+    <view class="modal-content" catchtap="true">
+      <view class="modal-header">
+        <view class="modal-image">
+          <text class="image-placeholder">🛍️</text>
+        </view>
+        <view class="modal-info">
+          <text class="modal-price">¥{{product.price}}</text>
+          <text class="modal-name">{{product.name}}</text>
+          <text class="modal-spec">已选：{{selectedSpec}}</text>
+        </view>
+        <text class="modal-close" bindtap="onSpecModalClose">✕</text>
+      </view>
+      <view class="modal-body">
+        <view class="spec-group" wx:for="{{product.specs}}" wx:key="name" wx:for-item="specGroup">
+          <text class="spec-group-title">{{specGroup.name}}</text>
+          <view class="spec-options">
+            <view 
+              class="spec-option {{selectedSpecs[specGroup.name] === item ? 'active' : ''}}"
+              wx:for="{{specGroup.options}}" 
+              wx:key="*this" 
+              wx:for-item="item"
+              bindtap="onSpecSelect"
+              data-group="{{specGroup.name}}"
+              data-value="{{item}}"
+            >
+              <text class="option-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <view class="modal-btn confirm-btn" bindtap="onSpecConfirm">
+          <text class="btn-text">确定</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

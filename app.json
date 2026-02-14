@@ -4,7 +4,11 @@
     "pages/nearby/nearby",
     "pages/member-code/member-code",
     "pages/records/records",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/shop/shop",
+    "pages/hotel/hotel",
+    "pages/spots/spots",
+    "pages/product-detail/product-detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",

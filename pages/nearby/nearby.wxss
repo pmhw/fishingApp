@@ -3,22 +3,52 @@
   padding: 20rpx;
   background-color: #f5f5f5;
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* 顶部区域 */
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background-color: #fff;
-  padding: 30rpx;
+  padding: 25rpx 30rpx;
   margin-bottom: 20rpx;
-  border-radius: 12rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.location-btn {
+  width: 60rpx;
+  height: 60rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.location-icon {
+  font-size: 32rpx;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
 }
 
 .header-title {
-  font-size: 36rpx;
+  font-size: 34rpx;
   font-weight: bold;
   color: #333;
+  margin-bottom: 6rpx;
 }
 
 .location-tip {
@@ -26,18 +56,19 @@
   color: #667eea;
 }
 
+/* 钓场列表 */
 .spot-list {
   display: flex;
   flex-direction: column;
+  gap: 20rpx;
 }
 
 .spot-item {
   display: flex;
   background-color: #fff;
-  padding: 20rpx;
-  margin-bottom: 20rpx;
-  border-radius: 12rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  padding: 24rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 }
 
 .spot-image {
@@ -48,7 +79,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20rpx;
+  margin-right: 24rpx;
   flex-shrink: 0;
 }
 
@@ -60,19 +91,23 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .spot-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15rpx;
+  margin-bottom: 12rpx;
 }
 
 .spot-name {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .spot-rating {
@@ -90,35 +125,82 @@
   color: #ff9500;
 }
 
-.spot-address {
+.spot-distance {
   font-size: 26rpx;
   color: #666;
-  margin-bottom: 10rpx;
+  margin-bottom: 6rpx;
 }
 
-.spot-distance {
+.spot-address {
   font-size: 24rpx;
   color: #999;
-  margin-bottom: 20rpx;
+  margin-bottom: 12rpx;
 }
 
-.spot-footer {
+/* 标签 */
+.spot-tags {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.tag-item {
+  display: flex;
   align-items: center;
+  padding: 6rpx 14rpx;
+  background-color: #e8f4ff;
+  border-radius: 20rpx;
+}
+
+.tag-icon {
+  font-size: 20rpx;
+  margin-right: 4rpx;
+}
+
+.tag-text {
+  font-size: 22rpx;
+  color: #667eea;
+}
+
+/* 操作按钮 */
+.spot-actions {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
   margin-top: auto;
 }
 
-.spot-price {
-  font-size: 32rpx;
-  color: #ff4757;
-  font-weight: bold;
+.action-btn {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+  border-radius: 50rpx;
+  font-size: 24rpx;
+}
+
+.phone-btn {
+  background-color: #667eea;
+  color: #fff;
 }
 
 .navigate-btn {
-  padding: 10rpx 30rpx;
-  background-color: #667eea;
+  background-color: #52c41a;
   color: #fff;
-  border-radius: 50rpx;
+}
+
+.btn-icon {
   font-size: 24rpx;
+  margin-right: 5rpx;
+}
+
+.btn-text {
+  font-size: 24rpx;
+}
+
+.spot-price {
+  margin-left: auto;
+  font-size: 32rpx;
+  color: #ff4757;
+  font-weight: bold;
 }

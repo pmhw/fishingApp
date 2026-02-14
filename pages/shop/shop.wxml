@@ -1,0 +1,52 @@
+<!-- pages/shop/shop.wxml -->
+<view class="shop-container">
+  <!-- 左侧分类 -->
+  <view class="category-panel">
+    <scroll-view 
+      scroll-y="true" 
+      class="category-scroll"
+    >
+      <view 
+        class="category-item {{currentCategoryId === item.id ? 'active' : ''}}" 
+        wx:for="{{categoryList}}" 
+        wx:key="id"
+        bindtap="onCategoryTap"
+        data-id="{{item.id}}"
+      >
+        <text class="category-name">{{item.name}}</text>
+        <view class="category-indicator" wx:if="{{currentCategoryId === item.id}}"></view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 右侧商品列表 -->
+  <view class="product-panel">
+    <scroll-view 
+      scroll-y="true" 
+      class="product-scroll"
+    >
+      <view class="product-grid">
+        <view 
+          class="product-card" 
+          wx:for="{{displayProducts}}" 
+          wx:key="id"
+          bindtap="onProductTap"
+          data-product="{{item}}"
+        >
+          <view class="product-image">
+            <text class="image-placeholder">🛒</text>
+          </view>
+          <view class="product-info">
+            <text class="product-name">{{item.name}}</text>
+            <text class="product-desc">{{item.desc}}</text>
+            <view class="product-bottom">
+              <text class="product-price">¥{{item.price}}</text>
+              <text class="product-tag">{{item.tag}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+

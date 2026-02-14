@@ -10,12 +10,18 @@ Page({
     weather: {
       temperature: 22,
       weatherType: '晴天',
+      weatherTypeClass: 'sunny', // sunny, rainy, cloudy, snowy
+      icon: '☀️',
       humidity: 65,
       hpa: 1013,
       windSpeed: 3.5,
       windDirection: '东北风',
       visibility: 10
     },
+    // 动态效果数据
+    particles: [],
+    rainDrops: [],
+    snowflakes: [],
     
     // 轮播图（包含排行榜）
     bannerList: [
@@ -173,6 +179,7 @@ Page({
     this.getWeather()
     this.checkIcons()
     this.updateWeatherDisplay()
+    this.initWeatherAnimation()
   },
   
   // 检测图标文件是否存在
@@ -237,10 +244,21 @@ Page({
   getWeather() {
     // 这里可以调用天气API
     // 暂时使用模拟数据
+    const weatherTypes = [
+      { type: '晴天', class: 'sunny', icon: '☀️' },
+      { type: '雨天', class: 'rainy', icon: '🌧️' },
+      { type: '多云', class: 'cloudy', icon: '☁️' },
+      { type: '雪天', class: 'snowy', icon: '❄️' }
+    ]
+    // 默认使用晴天，也可以随机选择：weatherTypes[Math.floor(Math.random() * weatherTypes.length)]
+    const currentWeather = weatherTypes[1] // 默认晴天
+    
     this.setData({
       weather: {
         temperature: 22,
-        weatherType: '晴天',
+        weatherType: currentWeather.type,
+        weatherTypeClass: currentWeather.class,
+        icon: currentWeather.icon,
         humidity: 65,
         hpa: 1013,
         windSpeed: 3.5,
@@ -249,6 +267,47 @@ Page({
       }
     })
     this.updateWeatherDisplay()
+    this.initWeatherAnimation()
+  },
+
+  // 初始化天气动画数据
+  initWeatherAnimation() {
+    const weatherClass = this.data.weather.weatherTypeClass
+    
+    if (weatherClass === 'sunny') {
+      // 生成粒子数据
+      const particles = []
+      for (let i = 0; i < 15; i++) {
+        particles.push({
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          delay: Math.random() * 2
+        })
+      }
+      this.setData({ particles })
+    } else if (weatherClass === 'rainy') {
+      // 生成雨滴数据
+      const rainDrops = []
+      for (let i = 0; i < 20; i++) {
+        rainDrops.push({
+          x: Math.random() * 100,
+          delay: Math.random() * 2,
+          duration: 0.5 + Math.random() * 0.5
+        })
+      }
+      this.setData({ rainDrops })
+    } else if (weatherClass === 'snowy') {
+      // 生成雪花数据
+      const snowflakes = []
+      for (let i = 0; i < 12; i++) {
+        snowflakes.push({
+          x: Math.random() * 100,
+          delay: Math.random() * 3,
+          duration: 3 + Math.random() * 2
+        })
+      }
+      this.setData({ snowflakes })
+    }
   },
 
   // 更新天气显示文字
@@ -316,10 +375,14 @@ Page({
   // 点击钓场
   onSpotTap(e) {
     const spot = e.currentTarget.dataset.spot
-    wx.showToast({
-      title: `点击了${spot.name}`,
-      icon: 'none'
+    // 跳转到钓场列表页面
+    wx.navigateTo({
+      url: '/pages/spots/spots'
     })
+    // 这里可以跳转到钓场详情页
+    // wx.navigateTo({
+    //   url: `/pages/spot-detail/spot-detail?id=${spot.id}`
+    // })
   },
 
   // 拨打电话
@@ -355,54 +418,127 @@ Page({
   // 点击功能入口
   onFunctionTap(e) {
     const functionItem = e.currentTarget.dataset.function
-    wx.showToast({
-      title: `进入${functionItem.name}`,
-      icon: 'none'
-    })
-    // 这里可以根据type跳转到不同页面
-    // if (functionItem.type === 'shop') {
-    //   wx.navigateTo({ url: '/pages/shop/shop' })
-    // } else if (functionItem.type === 'hotel') {
-    //   wx.navigateTo({ url: '/pages/hotel/hotel' })
-    // }
+    const type = functionItem.type
+    
+    // 根据类型跳转到对应页面
+    switch (type) {
+      case 'spot':
+        // 跳转到钓场列表页面
+        wx.navigateTo({
+          url: '/pages/spots/spots'
+        })
+        break
+      case 'shop':
+        // 跳转到商城页面
+        wx.navigateTo({
+          url: '/pages/shop/shop'
+        })
+        break
+      case 'hotel':
+        // 跳转到住宿页面
+        wx.navigateTo({
+          url: '/pages/hotel/hotel'
+        })
+        break
+      case 'restaurant':
+        // 餐饮功能（待开发）
+        wx.showToast({
+          title: '餐饮功能开发中',
+          icon: 'none'
+        })
+        break
+      case 'equipment':
+        // 装备功能（待开发）
+        wx.showToast({
+          title: '装备功能开发中',
+          icon: 'none'
+        })
+        break
+      case 'activity':
+        // 活动功能（待开发）
+        wx.showToast({
+          title: '活动功能开发中',
+          icon: 'none'
+        })
+        break
+      case 'community':
+        // 社区功能（待开发）
+        wx.showToast({
+          title: '社区功能开发中',
+          icon: 'none'
+        })
+        break
+      case 'more':
+        // 更多功能（待开发）
+        wx.showToast({
+          title: '更多功能开发中',
+          icon: 'none'
+        })
+        break
+      default:
+        wx.showToast({
+          title: `进入${functionItem.name}`,
+          icon: 'none'
+        })
+    }
   },
 
   // 点击更多
   onMoreTap(e) {
     const type = e.currentTarget.dataset.type
-    const typeMap = {
-      'spot': '钓场',
-      'shop': '商城',
-      'hotel': '住宿'
+    
+    // 根据类型跳转到对应列表页
+    switch (type) {
+      case 'spot':
+        // 跳转到钓场列表页面
+        wx.navigateTo({
+          url: '/pages/spots/spots'
+        })
+        break
+      case 'shop':
+        // 跳转到商城页面
+        wx.navigateTo({
+          url: '/pages/shop/shop'
+        })
+        break
+      case 'hotel':
+        // 跳转到住宿页面
+        wx.navigateTo({
+          url: '/pages/hotel/hotel'
+        })
+        break
+      default:
+        wx.showToast({
+          title: '查看更多',
+          icon: 'none'
+        })
     }
-    wx.showToast({
-      title: `查看${typeMap[type] || '更多'}`,
-      icon: 'none'
-    })
-    // 这里可以跳转到对应列表页
-    // if (type === 'spot') {
-    //   wx.switchTab({ url: '/pages/nearby/nearby' })
-    // }
   },
 
   // 点击商品
   onShopTap(e) {
     const shop = e.currentTarget.dataset.shop
-    wx.showToast({
-      title: `查看${shop.name}`,
-      icon: 'none'
+    // 跳转到商城页面
+    wx.navigateTo({
+      url: '/pages/shop/shop'
     })
     // 这里可以跳转到商品详情页
+    // wx.navigateTo({
+    //   url: `/pages/product-detail/product-detail?id=${shop.id}`
+    // })
   },
 
   // 点击住宿
   onHotelTap(e) {
     const hotel = e.currentTarget.dataset.hotel
-    wx.showToast({
-      title: `查看${hotel.name}`,
-      icon: 'none'
+    // 跳转到住宿列表页面
+    wx.navigateTo({
+      url: '/pages/hotel/hotel'
     })
     // 这里可以跳转到住宿详情页
+    // wx.navigateTo({
+    //   url: `/pages/hotel-detail/hotel-detail?id=${hotel.id}`
+    // })
   },
 
   // 搜索按钮点击

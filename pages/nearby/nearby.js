@@ -9,7 +9,13 @@ Page({
         address: 'XX路123号',
         rating: 4.8,
         price: '¥50/天',
-        image: '/images/spot1.jpg'
+        phone: '13800138000',
+        latitude: 39.908823,
+        longitude: 116.397470,
+        tags: ['wifi', 'parking', 'toilet'],
+        hasWifi: true,
+        hasParking: true,
+        hasToilet: true
       },
       { 
         id: 2, 
@@ -18,7 +24,13 @@ Page({
         address: 'XX路456号',
         rating: 4.6,
         price: '¥80/天',
-        image: '/images/spot2.jpg'
+        phone: '13800138001',
+        latitude: 39.918823,
+        longitude: 116.407470,
+        tags: ['wifi', 'parking'],
+        hasWifi: true,
+        hasParking: true,
+        hasToilet: false
       },
       { 
         id: 3, 
@@ -27,7 +39,13 @@ Page({
         address: 'XX路789号',
         rating: 4.9,
         price: '¥100/天',
-        image: '/images/spot3.jpg'
+        phone: '13800138002',
+        latitude: 39.928823,
+        longitude: 116.417470,
+        tags: ['wifi', 'parking', 'toilet'],
+        hasWifi: true,
+        hasParking: true,
+        hasToilet: true
       }
     ],
     currentLocation: null
@@ -78,10 +96,18 @@ Page({
   onNavigate(e) {
     const spot = e.currentTarget.dataset.spot
     wx.openLocation({
-      latitude: 39.908823,
-      longitude: 116.397470,
+      latitude: spot.latitude,
+      longitude: spot.longitude,
       name: spot.name,
       address: spot.address
+    })
+  },
+
+  // 拨打电话
+  onCallPhone(e) {
+    const phone = e.currentTarget.dataset.phone
+    wx.makePhoneCall({
+      phoneNumber: phone
     })
   }
 })

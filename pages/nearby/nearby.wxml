@@ -1,10 +1,20 @@
 <!--pages/nearby/nearby.wxml-->
 <view class="container">
+  <!-- 顶部区域 -->
   <view class="header">
-    <text class="header-title">附近钓场</text>
-    <text class="location-tip" wx:if="{{currentLocation}}">📍 已定位</text>
+    <view class="header-left">
+      <view class="location-btn" bindtap="getLocation">
+        <text class="location-icon">📍</text>
+      </view>
+      <view class="header-info">
+        <text class="header-title">附近钓场</text>
+        <text class="location-tip" wx:if="{{currentLocation}}">已定位</text>
+        <text class="location-tip" wx:else>点击定位</text>
+      </view>
+    </view>
   </view>
 
+  <!-- 钓场列表 -->
   <view class="spot-list">
     <view 
       class="spot-item" 
@@ -24,13 +34,36 @@
             <text class="rating-value">{{item.rating}}</text>
           </view>
         </view>
-        <text class="spot-address">📍 {{item.address}}</text>
-        <text class="spot-distance">距离：{{item.distance}}</text>
-        <view class="spot-footer">
-          <text class="spot-price">{{item.price}}</text>
-          <view class="navigate-btn" bindtap="onNavigate" data-spot="{{item}}" catchtap="true">
-            导航
+        <text class="spot-distance">📍 距离 {{item.distance}}</text>
+        <text class="spot-address">{{item.address}}</text>
+        
+        <!-- 标签 -->
+        <view class="spot-tags">
+          <view class="tag-item" wx:if="{{item.hasWifi}}">
+            <text class="tag-icon">📶</text>
+            <text class="tag-text">WiFi</text>
           </view>
+          <view class="tag-item" wx:if="{{item.hasParking}}">
+            <text class="tag-icon">🅿️</text>
+            <text class="tag-text">停车场</text>
+          </view>
+          <view class="tag-item" wx:if="{{item.hasToilet}}">
+            <text class="tag-icon">🚻</text>
+            <text class="tag-text">卫生间</text>
+          </view>
+        </view>
+        
+        <!-- 操作按钮 -->
+        <view class="spot-actions">
+          <view class="action-btn phone-btn" bindtap="onCallPhone" data-phone="{{item.phone}}" catchtap="true">
+            <text class="btn-icon">📞</text>
+            <text class="btn-text">电话</text>
+          </view>
+          <view class="action-btn navigate-btn" bindtap="onNavigate" data-spot="{{item}}" catchtap="true">
+            <text class="btn-icon">🧭</text>
+            <text class="btn-text">导航</text>
+          </view>
+          <text class="spot-price">{{item.price}}</text>
         </view>
       </view>
     </view>

@@ -1,0 +1,102 @@
+<!--pages/spots/spots.wxml-->
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="search-header">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索钓场名称、地址..." bindinput="onSearchInput" value="{{searchKeyword}}" />
+      <text class="search-clear" wx:if="{{searchKeyword}}" bindtap="onClearSearch">✕</text>
+    </view>
+  </view>
+
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view class="filter-item" bindtap="onFilterTap" data-type="sort">
+      <text class="filter-text">{{sortText}}</text>
+      <text class="filter-arrow">▼</text>
+    </view>
+    <view class="filter-item" bindtap="onFilterTap" data-type="price">
+      <text class="filter-text">{{priceText}}</text>
+      <text class="filter-arrow">▼</text>
+    </view>
+    <view class="filter-item" bindtap="onFilterTap" data-type="distance">
+      <text class="filter-text">{{distanceText}}</text>
+      <text class="filter-arrow">▼</text>
+    </view>
+  </view>
+
+  <!-- 钓场列表 -->
+  <view class="spot-list">
+    <view 
+      class="spot-card" 
+      wx:for="{{displaySpots}}" 
+      wx:key="id"
+      bindtap="onSpotTap"
+      data-spot="{{item}}"
+    >
+      <view class="spot-image-wrapper">
+        <view class="spot-image">
+          <text class="image-placeholder">🎣</text>
+        </view>
+        <view class="spot-rating-badge">
+          <text class="rating-star">⭐</text>
+          <text class="rating-value">{{item.rating}}</text>
+        </view>
+        <view class="spot-distance-badge">
+          <text class="distance-text">📍 {{item.distance}}</text>
+        </view>
+      </view>
+      
+      <view class="spot-content">
+        <view class="spot-header">
+          <text class="spot-name">{{item.name}}</text>
+        </view>
+        
+        <text class="spot-address">{{item.address}}</text>
+        
+        <!-- 标签 -->
+        <view class="spot-tags">
+          <view class="tag-item" wx:if="{{item.hasWifi}}">
+            <text class="tag-icon">📶</text>
+            <text class="tag-text">WiFi</text>
+          </view>
+          <view class="tag-item" wx:if="{{item.hasParking}}">
+            <text class="tag-icon">🅿️</text>
+            <text class="tag-text">停车场</text>
+          </view>
+          <view class="tag-item" wx:if="{{item.hasToilet}}">
+            <text class="tag-icon">🚻</text>
+            <text class="tag-text">卫生间</text>
+          </view>
+          <view class="tag-item" wx:if="{{item.hasRestaurant}}">
+            <text class="tag-icon">🍽️</text>
+            <text class="tag-text">餐饮</text>
+          </view>
+        </view>
+        
+        <!-- 底部信息 -->
+        <view class="spot-footer">
+          <view class="spot-price-wrapper">
+            <text class="price-text">{{item.price}}</text>
+          </view>
+          <view class="spot-actions">
+            <view class="action-btn phone-btn" bindtap="onCallPhone" data-phone="{{item.phone}}" catchtap="true">
+              <text class="btn-icon">📞</text>
+              <text class="btn-text">电话</text>
+            </view>
+            <view class="action-btn navigate-btn" bindtap="onNavigate" data-spot="{{item}}" catchtap="true">
+              <text class="btn-icon">🧭</text>
+              <text class="btn-text">导航</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{displaySpots.length === 0}}">
+    <text class="empty-icon">🎣</text>
+    <text class="empty-text">暂无钓场信息</text>
+  </view>
+</view>

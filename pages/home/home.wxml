@@ -53,13 +53,41 @@
   </swiper>
 
   <!-- 天气信息卡片 -->
-  <view class="weather-card">
+  <view class="weather-card weather-{{weather.weatherTypeClass}}">
+    <!-- 动态背景层 -->
+    <view class="weather-bg-animation">
+      <!-- 晴天：光晕和粒子 -->
+      <view class="sun-rays" wx:if="{{weather.weatherTypeClass === 'sunny'}}"></view>
+      <view class="particles" wx:if="{{weather.weatherTypeClass === 'sunny'}}">
+        <view class="particle" wx:for="{{particles}}" wx:key="index" style="left: {{item.x}}%; top: {{item.y}}%; animation-delay: {{item.delay}}s;"></view>
+      </view>
+      
+      <!-- 雨天：雨滴 -->
+      <view class="rain-drops" wx:if="{{weather.weatherTypeClass === 'rainy'}}">
+        <view class="rain-drop" wx:for="{{rainDrops}}" wx:key="index" style="left: {{item.x}}%; animation-delay: {{item.delay}}s; animation-duration: {{item.duration}}s;"></view>
+      </view>
+      
+      <!-- 多云：云朵 -->
+      <view class="clouds" wx:if="{{weather.weatherTypeClass === 'cloudy'}}">
+        <view class="cloud cloud-1"></view>
+        <view class="cloud cloud-2"></view>
+        <view class="cloud cloud-3"></view>
+      </view>
+      
+      <!-- 雪天：雪花 -->
+      <view class="snowflakes" wx:if="{{weather.weatherTypeClass === 'snowy'}}">
+        <view class="snowflake" wx:for="{{snowflakes}}" wx:key="index" style="left: {{item.x}}%; animation-delay: {{item.delay}}s; animation-duration: {{item.duration}}s;">❄</view>
+      </view>
+    </view>
+    
     <view class="weather-main">
       <view class="weather-left">
         <text class="temperature">{{weather.temperature}}°</text>
         <text class="weather-type">{{weather.weatherType}}</text>
       </view>
-      <view class="weather-icon">☀️</view>
+      <view class="weather-icon-wrapper">
+        <text class="weather-icon weather-icon-{{weather.weatherTypeClass}}">{{weather.icon}}</text>
+      </view>
     </view>
     <view class="weather-details">
       <view class="weather-item">

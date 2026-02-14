@@ -1,0 +1,278 @@
+/* pages/hotel/hotel.wxss */
+page {
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+.container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 0 !important;
+  padding-bottom: 40rpx !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  margin: 0 !important;
+  display: block !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+
+/* 搜索栏 */
+.search-header {
+  background-color: #fff;
+  padding: 20rpx 30rpx;
+  padding-top: 20rpx;
+  margin-top: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 50rpx;
+  padding: 16rpx 24rpx;
+}
+
+.search-icon {
+  font-size: 28rpx;
+  color: #999;
+  margin-right: 12rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.search-clear {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 12rpx;
+  padding: 4rpx;
+}
+
+/* 筛选栏 */
+.filter-bar {
+  display: flex;
+  background-color: #fff;
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12rpx 0;
+}
+
+.filter-text {
+  font-size: 26rpx;
+  color: #666;
+  margin-right: 8rpx;
+}
+
+.filter-arrow {
+  font-size: 20rpx;
+  color: #999;
+}
+
+/* 住宿列表 */
+.hotel-list {
+  padding: 20rpx 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hotel-card {
+  background-color: #fff;
+  border-radius: 20rpx;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hotel-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 360rpx;
+  overflow: hidden;
+}
+
+.hotel-image {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-placeholder {
+  font-size: 120rpx;
+  opacity: 0.8;
+}
+
+.hotel-rating-badge {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10rpx);
+  padding: 8rpx 16rpx;
+  border-radius: 30rpx;
+}
+
+.rating-star {
+  font-size: 20rpx;
+  margin-right: 4rpx;
+}
+
+.rating-value {
+  font-size: 24rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.hotel-content {
+  padding: 24rpx;
+}
+
+.hotel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12rpx;
+}
+
+.hotel-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  margin-right: 12rpx;
+}
+
+.hotel-distance {
+  font-size: 24rpx;
+  color: #999;
+  white-space: nowrap;
+}
+
+.hotel-address {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+/* 标签 */
+.hotel-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 20rpx;
+}
+
+.tag-item {
+  padding: 6rpx 14rpx;
+  background-color: #e8f4ff;
+  border-radius: 20rpx;
+}
+
+.tag-text {
+  font-size: 22rpx;
+  color: #667eea;
+}
+
+/* 底部信息 */
+.hotel-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.hotel-price-wrapper {
+  display: flex;
+  align-items: baseline;
+}
+
+.price-symbol {
+  font-size: 24rpx;
+  color: #ff4757;
+  font-weight: 600;
+}
+
+.hotel-price {
+  font-size: 36rpx;
+  color: #ff4757;
+  font-weight: 700;
+  margin: 0 4rpx;
+}
+
+.price-unit {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.hotel-actions {
+  display: flex;
+  gap: 12rpx;
+}
+
+.action-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.call-btn {
+  background-color: #667eea;
+}
+
+.navigate-btn {
+  background-color: #52c41a;
+}
+
+.btn-icon {
+  font-size: 32rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.3;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
