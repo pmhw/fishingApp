@@ -150,11 +150,9 @@ Page({
   // 点击钓场
   onSpotTap(e) {
     const spot = e.currentTarget.dataset.spot
-    wx.showToast({
-      title: `查看 ${spot.name}`,
-      icon: 'none'
+    wx.navigateTo({
+      url: `/pages/spot-detail/spot-detail?id=${spot.id}`
     })
-    // 这里可以跳转到钓场详情页
   },
 
   // 拨打电话

@@ -375,14 +375,9 @@ Page({
   // 点击钓场
   onSpotTap(e) {
     const spot = e.currentTarget.dataset.spot
-    // 跳转到钓场列表页面
     wx.navigateTo({
-      url: '/pages/spots/spots'
+      url: `/pages/spot-detail/spot-detail?id=${spot.id}`
     })
-    // 这里可以跳转到钓场详情页
-    // wx.navigateTo({
-    //   url: `/pages/spot-detail/spot-detail?id=${spot.id}`
-    // })
   },
 
   // 拨打电话

@@ -86,9 +86,8 @@ Page({
   // 点击钓场
   onSpotTap(e) {
     const spot = e.currentTarget.dataset.spot
-    wx.showToast({
-      title: `点击了${spot.name}`,
-      icon: 'none'
+    wx.navigateTo({
+      url: `/pages/spot-detail/spot-detail?id=${spot.id}`
     })
   },
 

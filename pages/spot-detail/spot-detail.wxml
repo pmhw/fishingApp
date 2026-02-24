@@ -1,0 +1,223 @@
+<!-- pages/spot-detail/spot-detail.wxml -->
+<view class="detail-page">
+  <!-- 顶部图片轮播 -->
+  <swiper
+    class="header-swiper"
+    indicator-dots="{{true}}"
+    autoplay="{{false}}"
+    circular="{{true}}"
+  >
+    <swiper-item wx:for="{{spot.images}}" wx:key="*this">
+      <image class="header-image" src="{{item}}" mode="aspectFill"></image>
+    </swiper-item>
+  </swiper>
+
+  <!-- 基本信息卡片 -->
+  <view class="base-card">
+    <view class="base-top">
+      <view class="title-row">
+        <text class="spot-name">{{spot.name}}</text>
+        <text class="status-tag {{spot.status === '营业中' ? 'status-open' : 'status-close'}}">
+          {{spot.status}}
+        </text>
+      </view>
+      <view class="meta-row">
+        <text class="rating-stars">★★★★★</text>
+        <text class="rating-score">{{spot.rating}}分</text>
+      </view>
+      <view class="meta-row">
+        <text class="meta-text">钓位 {{spot.seat}}/{{spot.seatTotal}}</text>
+        <text class="meta-divider">·</text>
+        <text class="meta-text">距离 {{spot.distance}}</text>
+      </view>
+    </view>
+
+    <view class="base-actions">
+      <view class="action-item" bindtap="onToggleFavorite">
+        <text class="action-icon">♡</text>
+        <text class="action-text">收藏</text>
+      </view>
+      <view class="action-item" bindtap="onCallPhone">
+        <text class="action-icon">📞</text>
+        <text class="action-text">电话</text>
+      </view>
+      <view class="action-item" bindtap="onNavigate">
+        <text class="action-icon">🧭</text>
+        <text class="action-text">导航</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 顶部 Tab -->
+  <view class="tabs">
+    <view
+      class="tab-item {{currentTab === 'realtime' ? 'active' : ''}}"
+      data-key="realtime"
+      bindtap="onTabChange"
+    >
+      <text>实时战况</text>
+    </view>
+    <view
+      class="tab-item {{currentTab === 'info' ? 'active' : ''}}"
+      data-key="info"
+      bindtap="onTabChange"
+    >
+      <text>钓场信息</text>
+    </view>
+    <view
+      class="tab-item {{currentTab === 'ponds' ? 'active' : ''}}"
+      data-key="ponds"
+      bindtap="onTabChange"
+    >
+      <text>池塘列表</text>
+    </view>
+    <view
+      class="tab-item {{currentTab === 'feeds' ? 'active' : ''}}"
+      data-key="feeds"
+      bindtap="onTabChange"
+    >
+      <text>放鱼动态</text>
+    </view>
+  </view>
+
+  <!-- 实时战况 -->
+  <view wx:if="{{currentTab === 'realtime'}}" class="tab-panel">
+    <view class="sub-tabs">
+      <text
+        class="sub-tab {{currentRankTab === 'total' ? 'active' : ''}}"
+        data-key="total"
+        bindtap="onRankTabChange"
+      >
+        总重排行
+      </text>
+      <text
+        class="sub-tab {{currentRankTab === 'single' ? 'active' : ''}}"
+        data-key="single"
+        bindtap="onRankTabChange"
+      >
+        单尾排行
+      </text>
+      <text
+        class="sub-tab {{currentRankTab === 'count' ? 'active' : ''}}"
+        data-key="count"
+        bindtap="onRankTabChange"
+      >
+        尾数排行
+      </text>
+    </view>
+
+    <view class="empty-block">
+      <text class="empty-icon">📁</text>
+      <text class="empty-text">暂无数据</text>
+    </view>
+  </view>
+
+  <!-- 钓场信息 -->
+  <view wx:if="{{currentTab === 'info'}}" class="tab-panel">
+    <view class="info-summary">
+      <text class="info-text">{{spot.description}}</text>
+    </view>
+
+    <view class="info-list">
+      <view class="info-item">
+        <text class="info-label">营业时间</text>
+        <text class="info-value">{{spot.openTime}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">联系电话</text>
+        <text class="info-value">{{spot.phone}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">具体地址</text>
+        <text class="info-value">{{spot.address}}</text>
+      </view>
+    </view>
+
+    <view class="facility-section">
+      <text class="facility-title">场地设施</text>
+      <view class="facility-tags">
+        <view
+          class="facility-tag"
+          wx:for="{{spot.facilities}}"
+          wx:key="*this"
+          wx:for-item="item"
+        >
+          <text class="facility-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 池塘列表 -->
+  <view wx:if="{{currentTab === 'ponds'}}" class="tab-panel">
+    <view
+      class="pond-card"
+      wx:for="{{spot.ponds}}"
+      wx:key="id"
+      wx:for-item="pond"
+    >
+      <view class="pond-header">
+        <view class="pond-title">
+          <text class="pond-name">{{pond.name}}</text>
+          <text class="pond-status {{pond.status === '开放中' ? 'status-open' : 'status-close'}}">
+            {{pond.status}}
+          </text>
+        </view>
+        <text class="pond-link">立即开卡 ></text>
+      </view>
+
+      <view class="pond-meta">
+        <text class="meta-item">面积：{{pond.area}}</text>
+        <text class="meta-item">水深：{{pond.depth}}</text>
+        <text class="meta-item">类型：{{pond.type}}</text>
+      </view>
+
+      <view class="pond-fee">
+        <view class="fee-header">收费标准</view>
+        <view class="fee-row" wx:for="{{pond.feeRules}}" wx:key="name" wx:for-item="rule">
+          <text class="fee-name">{{rule.name}}</text>
+          <text class="fee-price">{{rule.price}}</text>
+        </view>
+      </view>
+
+      <view class="pond-bottom">
+        <text class="pond-limit">杆长线：{{pond.rodLimit}}</text>
+        <text class="pond-rule">限饵规则：{{pond.baitRule}}</text>
+        <text class="pond-seat">钓位：{{pond.seat}}/{{pond.seatTotal}}</text>
+      </view>
+
+      <view class="pond-fish-tags">
+        <view
+          class="fish-tag"
+          wx:for="{{pond.fishTypes}}"
+          wx:key="*this"
+          wx:for-item="fish"
+        >
+          <text class="fish-text">{{fish}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 放鱼动态 -->
+  <view wx:if="{{currentTab === 'feeds'}}" class="tab-panel">
+    <view
+      class="feed-card"
+      wx:for="{{spot.feeds}}"
+      wx:key="id"
+      wx:for-item="feed"
+    >
+      <view class="feed-header">
+        <text class="feed-pond">{{feed.pondName}}</text>
+        <text class="feed-time">{{feed.time}}</text>
+      </view>
+      <text class="feed-desc">{{feed.desc}}</text>
+    </view>
+
+    <view class="empty-block" wx:if="{{!spot.feeds || !spot.feeds.length}}">
+      <text class="empty-icon">📁</text>
+      <text class="empty-text">暂无放鱼动态</text>
+    </view>
+  </view>
+</view>
+

@@ -1,0 +1,402 @@
+/* pages/spot-detail/spot-detail.wxss */
+page {
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+.detail-page {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: 20rpx;
+}
+
+/* 顶部轮播 */
+.header-swiper {
+  width: 100%;
+  height: 420rpx;
+  background-color: #ccc;
+}
+
+.header-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* 基本信息卡片 */
+.base-card {
+  background-color: #fff;
+  margin: -40rpx 20rpx 20rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.base-top {
+  padding: 24rpx 24rpx 16rpx;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.spot-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #333;
+  flex: 1;
+}
+
+.status-tag {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.status-open {
+  background-color: #e6f7e8;
+  color: #52c41a;
+}
+
+.status-close {
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  margin-top: 6rpx;
+}
+
+.rating-stars {
+  font-size: 24rpx;
+  color: #ffb400;
+  margin-right: 8rpx;
+}
+
+.rating-score {
+  font-size: 24rpx;
+  color: #ffb400;
+}
+
+.meta-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.meta-divider {
+  font-size: 24rpx;
+  color: #ddd;
+  margin: 0 8rpx;
+}
+
+.base-actions {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1rpx solid #f0f0f0;
+  padding: 16rpx 0;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.action-icon {
+  font-size: 32rpx;
+  margin-bottom: 4rpx;
+}
+
+.action-text {
+  font-size: 22rpx;
+  color: #666;
+}
+
+/* 顶部 Tab */
+.tabs {
+  display: flex;
+  background-color: #fff;
+  margin: 0 20rpx;
+  border-radius: 16rpx;
+  padding: 0 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 22rpx 0;
+  font-size: 26rpx;
+  color: #666;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #1677ff;
+  font-weight: 600;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 8rpx;
+  height: 4rpx;
+  border-radius: 4rpx;
+  background-color: #1677ff;
+}
+
+.tab-panel {
+  margin: 0 20rpx 16rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 20rpx 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 实时战况子 Tab */
+.sub-tabs {
+  display: flex;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 4rpx;
+  margin-bottom: 20rpx;
+}
+
+.sub-tab {
+  flex: 1;
+  text-align: center;
+  padding: 14rpx 0;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.sub-tab.active {
+  background-color: #fff;
+  border-radius: 10rpx;
+  color: #1677ff;
+  font-weight: 600;
+}
+
+.empty-block {
+  padding: 80rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-icon {
+  font-size: 72rpx;
+  opacity: 0.3;
+  margin-bottom: 16rpx;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 钓场信息 */
+.info-summary {
+  margin-bottom: 16rpx;
+}
+
+.info-text {
+  font-size: 26rpx;
+  color: #555;
+  line-height: 1.6;
+}
+
+.info-list {
+  border-top: 1rpx solid #f0f0f0;
+  margin-top: 12rpx;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: #333;
+  max-width: 60%;
+  text-align: right;
+}
+
+.facility-section {
+  margin-top: 12rpx;
+}
+
+.facility-title {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.facility-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.facility-tag {
+  padding: 6rpx 14rpx;
+  border-radius: 20rpx;
+  background-color: #e8f4ff;
+}
+
+.facility-text {
+  font-size: 22rpx;
+  color: #1677ff;
+}
+
+/* 池塘列表 */
+.pond-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 20rpx 16rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.pond-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.pond-title {
+  display: flex;
+  align-items: center;
+}
+
+.pond-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-right: 10rpx;
+}
+
+.pond-status {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.pond-link {
+  font-size: 24rpx;
+  color: #1677ff;
+}
+
+.pond-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx 16rpx;
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.meta-item {
+}
+
+.pond-fee {
+  background-color: #f6f8fb;
+  border-radius: 12rpx;
+  padding: 12rpx 12rpx 8rpx;
+  margin-bottom: 12rpx;
+}
+
+.fee-header {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.fee-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6rpx 0;
+  font-size: 24rpx;
+}
+
+.fee-name {
+  color: #555;
+}
+
+.fee-price {
+  color: #ff4d4f;
+}
+
+.pond-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6rpx 16rpx;
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.pond-fish-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.fish-tag {
+  padding: 4rpx 10rpx;
+  border-radius: 16rpx;
+  background-color: #fff4e6;
+}
+
+.fish-text {
+  font-size: 22rpx;
+  color: #ff9f43;
+}
+
+/* 放鱼动态 */
+.feed-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 18rpx 20rpx 14rpx;
+  margin-bottom: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+}
+
+.feed-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6rpx;
+}
+
+.feed-pond {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.feed-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.feed-desc {
+  font-size: 24rpx;
+  color: #666;
+}
+

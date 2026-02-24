@@ -9,7 +9,8 @@
     "pages/hotel/hotel",
     "pages/spots/spots",
     "pages/product-detail/product-detail",
-    "pages/search/search"
+    "pages/search/search",
+    "pages/spot-detail/spot-detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",
