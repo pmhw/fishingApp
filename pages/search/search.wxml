@@ -1,0 +1,74 @@
+<!-- pages/search/search.wxml -->
+<view class="search-page">
+  <!-- 顶部搜索栏 -->
+  <view class="search-header">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索商品、钓场..."
+        confirm-type="search"
+        focus="true"
+        value="{{keyword}}"
+        bindinput="onInput"
+        bindconfirm="onConfirm"
+      />
+      <text class="search-clear" wx:if="{{keyword}}" bindtap="onClearInput">✕</text>
+    </view>
+    <text class="search-cancel" bindtap="onCancel">取消</text>
+  </view>
+
+  <!-- 最近搜索 -->
+  <view class="history-section" wx:if="{{historyList.length > 0}}">
+    <view class="history-header">
+      <text class="history-title">最近搜索</text>
+      <text class="history-clear-all" bindtap="onClearHistory">清空</text>
+    </view>
+    <view class="history-list">
+      <view
+        class="history-item"
+        wx:for="{{historyList}}"
+        wx:key="*this"
+        wx:for-item="item"
+      >
+        <view class="history-chip" bindtap="onHistoryTap" data-keyword="{{item}}">
+          <text class="chip-text">{{item}}</text>
+        </view>
+        <text
+          class="history-delete"
+          bindtap="onHistoryDelete"
+          data-index="{{index}}"
+        >
+          ✕
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索结果（示例） -->
+  <view class="result-section" wx:if="{{resultList.length > 0}}">
+    <view class="result-title">搜索结果</view>
+    <view class="result-list">
+      <view
+        class="result-item"
+        wx:for="{{resultList}}"
+        wx:key="id"
+        bindtap="onResultTap"
+        data-item="{{item}}"
+      >
+        <view class="result-main">
+          <text class="result-name">{{item.name}}</text>
+          <text class="result-desc">{{item.desc}}</text>
+        </view>
+        <text class="result-type">{{item.typeText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-section" wx:if="{{!historyList.length && !resultList.length}}">
+    <text class="empty-icon">🔍</text>
+    <text class="empty-text">输入关键词开始搜索</text>
+  </view>
+</view>
+

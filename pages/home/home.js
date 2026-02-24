@@ -543,14 +543,9 @@ Page({
 
   // 搜索按钮点击
   onSearch() {
-    wx.showToast({
-      title: '搜索功能',
-      icon: 'none'
+    wx.navigateTo({
+      url: '/pages/search/search'
     })
-    // 这里可以跳转到搜索页面
-    // wx.navigateTo({
-    //   url: '/pages/search/search'
-    // })
   },
 
   // 天气点击

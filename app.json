@@ -8,7 +8,8 @@
     "pages/shop/shop",
     "pages/hotel/hotel",
     "pages/spots/spots",
-    "pages/product-detail/product-detail"
+    "pages/product-detail/product-detail",
+    "pages/search/search"
   ],
   "window": {
     "navigationBarTextStyle": "black",
