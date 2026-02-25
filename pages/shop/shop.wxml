@@ -48,5 +48,33 @@
       </view>
     </scroll-view>
   </view>
-</view>
 
+  <!-- 右下角悬浮购物车 -->
+  <view class="cart-float" bindtap="onOpenCart">
+    <text class="cart-float-icon">🛒</text>
+    <view class="cart-float-badge" wx:if="{{cartCount > 0}}">{{cartCount > 99 ? '99+' : cartCount}}</view>
+  </view>
+
+  <!-- 购物车抽屉 -->
+  <view class="cart-mask" wx:if="{{showCartDrawer}}" bindtap="onCloseCart"></view>
+  <view class="cart-drawer {{showCartDrawer ? 'cart-drawer--show' : ''}}">
+    <view class="cart-drawer-header">
+      <text class="cart-drawer-title">购物车</text>
+      <text class="cart-drawer-close" bindtap="onCloseCart">关闭</text>
+    </view>
+    <scroll-view scroll-y class="cart-drawer-body" wx:if="{{cartList.length > 0}}">
+      <view class="cart-item" wx:for="{{cartList}}" wx:key="_key">
+        <view class="cart-item-image"><text class="image-placeholder">🛒</text></view>
+        <view class="cart-item-info">
+          <text class="cart-item-name">{{item.name}}</text>
+          <text class="cart-item-spec" wx:if="{{item.spec}}">规格：{{item.spec}}</text>
+          <text class="cart-item-price">¥{{item.price}} x{{item.quantity || 1}}</text>
+        </view>
+        <view class="cart-item-del" data-index="{{index}}" bindtap="onRemoveCartItem">删除</view>
+      </view>
+    </scroll-view>
+    <view class="cart-drawer-empty" wx:else>
+      <text>购物车是空的</text>
+    </view>
+  </view>
+</view>

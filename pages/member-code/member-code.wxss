@@ -6,6 +6,57 @@
   padding-top: 10rpx;
 }
 
+/* 未登录：请先登录 */
+.login-required {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 40rpx;
+  box-sizing: border-box;
+}
+
+.login-required .login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.login-required .prompt-icon {
+  font-size: 100rpx;
+  margin-bottom: 32rpx;
+}
+
+.login-required .prompt-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.login-required .prompt-desc {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 48rpx;
+}
+
+.login-required .prompt-btn {
+  width: 400rpx;
+  height: 88rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.login-required .prompt-btn::after {
+  border: none;
+}
+
 /* 顶部Header */
 .top-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

@@ -1,6 +1,13 @@
 // pages/shop/shop.js
+const app = getApp()
+
 Page({
   data: {
+    // 购物车抽屉
+    showCartDrawer: false,
+    cartList: [],
+    cartCount: 0,
+
     // 左侧分类列表
     categoryList: [
       { id: 1, name: '推荐' },
@@ -108,6 +115,62 @@ Page({
     this.initDisplayProducts()
   },
 
+  onShow() {
+    this.syncCart()
+  },
+
+  /** 从全局购物车同步到页面（不同规格单独一行，每行唯一 key） */
+  syncCart() {
+    const cart = (app.globalData && app.globalData.cart) || []
+    const cartList = cart.map((item, i) => ({ ...item, _key: `${item.id}_${item.spec || ''}_${i}` }))
+    const cartCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0)
+    this.setData({ cartList, cartCount })
+  },
+
+  /** 打开购物车抽屉 */
+  onOpenCart() {
+    this.syncCart()
+    this.setData({ showCartDrawer: true })
+  },
+
+  /** 关闭购物车抽屉 */
+  onCloseCart() {
+    this.setData({ showCartDrawer: false })
+  },
+
+  /** 从购物车删除一项（按索引） */
+  onRemoveCartItem(e) {
+    const index = e.currentTarget.dataset.index
+    const cart = (app.globalData.cart || []).slice()
+    if (index < 0 || index >= cart.length) return
+    cart.splice(index, 1)
+    app.globalData.cart = cart
+    this.syncCart()
+    wx.showToast({ title: '已移除', icon: 'none' })
+  },
+
+  /** 商城列表内加购（点击商品卡加购时可用） */
+  addToCart(product, quantity = 1) {
+    if (!app.globalData.cart) app.globalData.cart = []
+    const cart = app.globalData.cart
+    const spec = ''
+    const item = cart.find(i => i.id === product.id && (i.spec || '') === spec)
+    if (item) {
+      item.quantity = (item.quantity || 1) + quantity
+    } else {
+      cart.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image || '',
+        quantity,
+        spec: ''
+      })
+    }
+    this.syncCart()
+    wx.showToast({ title: '已加入购物车', icon: 'success' })
+  },
+
   // 初始化右侧商品展示
   initDisplayProducts() {
     const { currentCategoryId } = this.data
@@ -131,13 +194,19 @@ Page({
     this.filterProductsByCategory(categoryId)
   },
 
-  // 点击商品
+  // 点击商品：跳转详情
   onProductTap(e) {
     const product = e.currentTarget.dataset.product
-    // 跳转到商品详情页
     wx.navigateTo({
       url: `/pages/product-detail/product-detail?id=${product.id}`
     })
+  },
+
+  // 商品卡上加购（阻止冒泡时用）
+  onAddCartTap(e) {
+    e.stopPropagation && e.stopPropagation()
+    const product = e.currentTarget.dataset.product
+    this.addToCart(product, 1)
   }
 })
 

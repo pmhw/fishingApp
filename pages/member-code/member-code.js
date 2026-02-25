@@ -1,12 +1,14 @@
 // pages/member-code/member-code.js
+const app = getApp()
+
 Page({
   data: {
+    userInfo: null,
+    showLoginModal: false,
     // 二维码图案（模拟数据）
     qrPattern: [],
-    // 折扣信息
     discount: 9,
     monthlyConsumption: '0.00',
-    // 折扣等级
     discountLevels: [
       { level: 9, amount: 200, width: 33, active: true },
       { level: 6, amount: 400, width: 33, active: false },
@@ -15,12 +17,35 @@ Page({
   },
 
   onLoad() {
-    console.log('会员码页面加载')
+    this.checkLoginStatus()
     this.generateQRPattern()
   },
 
   onShow() {
-    console.log('会员码页面显示')
+    this.checkLoginStatus()
+  },
+
+  /** 检查登录状态，未登录不展示会员码内容 */
+  checkLoginStatus() {
+    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
+    this.setData({ userInfo })
+    return !!userInfo
+  },
+
+  onShowLogin() {
+    this.setData({ showLoginModal: true })
+  },
+
+  onLoginSuccess(e) {
+    const { userInfo } = e.detail || {}
+    this.setData({
+      userInfo: userInfo || app.globalData.userInfo,
+      showLoginModal: false
+    })
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false })
   },
 
   // 生成二维码图案（模拟）

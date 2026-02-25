@@ -114,9 +114,9 @@ Page({
     this.setData({ selectedSpecs })
   },
 
-  // 确认规格选择
+  // 确认规格选择后直接加入购物车
   onSpecConfirm() {
-    const { selectedSpecs, product } = this.data
+    const { selectedSpecs, product, quantity } = this.data
     const specValues = Object.values(selectedSpecs)
     
     if (specValues.length !== product.specs.length) {
@@ -132,6 +132,8 @@ Page({
       selectedSpec,
       showSpecModal: false
     })
+    // 选择好规格后直接加入购物车
+    this.doAddToCart(quantity)
   },
 
   // 数量变化
@@ -181,34 +183,42 @@ Page({
     // 这里可以打开客服聊天窗口
   },
 
-  // 加入购物车
-  onAddToCart() {
-    const { product, selectedSpec, quantity } = this.data
-    
-    if (!selectedSpec && product.specs && product.specs.length > 0) {
-      wx.showToast({
-        title: '请选择规格',
-        icon: 'none'
+  /** 实际写入全局购物车；同商品同规格合并数量，不同规格单独一行 */
+  doAddToCart(qty) {
+    const { product, selectedSpec } = this.data
+    const quantity = typeof qty === 'number' ? qty : (this.data.quantity || 1)
+    const spec = selectedSpec || ''
+    const app = getApp()
+    if (!app.globalData.cart) app.globalData.cart = []
+    const cart = app.globalData.cart
+    const item = cart.find(i => i.id === product.id && (i.spec || '') === spec)
+    if (item) {
+      item.quantity = (item.quantity || 1) + quantity
+    } else {
+      cart.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: (product.images && product.images[0]) || product.image || '',
+        quantity,
+        spec
       })
-      this.onSpecTap()
-      return
     }
-    
     wx.showToast({
       title: `已加入购物车 x${quantity}`,
       icon: 'success'
     })
-    
-    // 这里可以调用API添加到购物车
-    // wx.request({
-    //   url: 'https://api.example.com/cart/add',
-    //   method: 'POST',
-    //   data: {
-    //     productId: product.id,
-    //     spec: selectedSpec,
-    //     quantity: quantity
-    //   }
-    // })
+  },
+
+  // 加入购物车：未选规格则弹出规格框，选好后确定会直接加入
+  onAddToCart() {
+    const { product, selectedSpec, quantity } = this.data
+    if (!selectedSpec && product.specs && product.specs.length > 0) {
+      wx.showToast({ title: '请选择规格', icon: 'none' })
+      this.onSpecTap()
+      return
+    }
+    this.doAddToCart(quantity)
   },
 
   // 立即购买

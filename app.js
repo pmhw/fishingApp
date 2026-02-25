@@ -15,6 +15,9 @@ App({
   },
   globalData: {
     userInfo: null,
-    globalSystemInfo: null // navBar组件需要的全局系统信息
+    globalSystemInfo: null, // navBar组件需要的全局系统信息
+    apiBaseUrl: 'https://fishing.kaiyuantong.cn',
+    /** 全局购物车 [{ id, name, price, image, quantity }] */
+    cart: []
   }
 })

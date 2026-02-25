@@ -56,9 +56,8 @@ Page({
 
   // 添加记录
   onAddRecord() {
-    wx.showToast({
-      title: '添加垂钓记录',
-      icon: 'none'
+    wx.navigateTo({
+      url: '/pages/record-add/record-add'
     })
   },
 

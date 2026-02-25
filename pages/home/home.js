@@ -1,4 +1,6 @@
 // pages/home/home.js
+const { request } = require('../../utils/util.js')
+
 Page({
   data: {
     // 当前地区
@@ -23,32 +25,10 @@ Page({
     rainDrops: [],
     snowflakes: [],
     
-    // 轮播图（包含排行榜）
-    bannerList: [
-      { 
-        id: 1, 
-        type: 'banner',
-        title: '春季垂钓活动',
-        image: '/images/banner1.jpg'
-      },
-      { 
-        id: 2, 
-        type: 'ranking',
-        title: '本周排行榜',
-        rankings: [
-          { rank: 1, name: '张钓友', weight: '8.5kg', spot: '阳光钓场' },
-          { rank: 2, name: '李钓友', weight: '7.2kg', spot: '清溪钓场' },
-          { rank: 3, name: '王钓友', weight: '6.8kg', spot: '湖畔钓场' }
-        ]
-      },
-      { 
-        id: 3, 
-        type: 'banner',
-        title: '会员专享优惠',
-        image: '/images/banner3.jpg'
-      }
-    ],
+    // 轮播图（包含排行榜），从接口加载，失败时用默认数据
+    bannerList: [],
     currentBanner: 0,
+    bannerLoading: false,
     
     // 优质钓场推荐
     recommendedSpots: [
@@ -180,6 +160,84 @@ Page({
     this.checkIcons()
     this.updateWeatherDisplay()
     this.initWeatherAnimation()
+    this.loadBanners()
+  },
+
+  /** 将相对路径转为完整图片 URL（接口返回 /storage/... 时需拼接域名） */
+  _fullImageUrl(url) {
+    if (!url || typeof url !== 'string') return ''
+    const s = url.trim()
+    if (/^https?:\/\//i.test(s)) return s
+    try {
+      const app = getApp()
+      const base = (app && app.globalData && app.globalData.apiBaseUrl) || ''
+      if (!base) return s
+      return base.replace(/\/$/, '') + (s.startsWith('/') ? s : '/' + s)
+    } catch (e) {
+      return s
+    }
+  },
+
+  /**
+   * 轮播图列表 - 对接 GET /api/mini/banners
+   * 不传 type 返回全部（status=1 且在有效期内），按 sort_order 升序
+   */
+  loadBanners() {
+    this.setData({ bannerLoading: true })
+    const urlPath = 'api/mini/banners'
+    console.log('loadBanners 开始请求轮播图:', urlPath)
+    request(urlPath, { method: 'GET' })
+      .then((res) => {
+        console.log('loadBanners 接口返回:', res)
+        if (res.code !== 0 || !Array.isArray(res.data)) {
+          console.warn('loadBanners 数据格式异常，使用默认数据', res)
+          this.setBannerFallback()
+          this.setData({ bannerLoading: false })
+          return
+        }
+        const bannerList = (res.data || []).map((item) => {
+          const rawImage = item.image_url || item.image || ''
+          const banner = {
+            id: item.id,
+            type: item.type || 'banner',
+            title: item.title || '',
+            image: this._fullImageUrl(rawImage),
+            link_url: item.link_url || '',
+            link_type: item.link_type || ''
+          }
+          if (banner.type === 'ranking') {
+            banner.rankings = item.rankings || []
+          }
+          return banner
+        })
+        this.setData({ bannerList, bannerLoading: false })
+        console.log('loadBanners 成功，条数:', bannerList.length)
+      })
+      .catch((err) => {
+        console.error('loadBanners 请求失败:', err)
+        this.setBannerFallback()
+        this.setData({ bannerLoading: false })
+      })
+  },
+
+  /** 接口失败时使用默认轮播数据 */
+  setBannerFallback() {
+    this.setData({
+      bannerList: [
+        { id: 1, type: 'banner', title: '春季垂钓活动', image: '/images/banner1.jpg' },
+        {
+          id: 2,
+          type: 'ranking',
+          title: '本周排行榜',
+          rankings: [
+            { rank: 1, name: '张钓友', weight: '8.5kg', spot: '阳光钓场' },
+            { rank: 2, name: '李钓友', weight: '7.2kg', spot: '清溪钓场' },
+            { rank: 3, name: '王钓友', weight: '6.8kg', spot: '湖畔钓场' }
+          ]
+        },
+        { id: 3, type: 'banner', title: '会员专享优惠', image: '/images/banner3.jpg' }
+      ]
+    })
   },
   
   // 检测图标文件是否存在
@@ -364,6 +422,34 @@ Page({
     this.setData({
       currentBanner: e.detail.current
     })
+  },
+
+  /** 点击普通轮播图：根据后台配置的域名地址或本地路由分别跳转 */
+  onBannerTap(e) {
+    const item = e.currentTarget.dataset.item
+    if (!item || item.type !== 'banner' || !item.link_url) return
+    const link = String(item.link_url).trim()
+    // 域名地址：http/https 开头 → webview 打开
+    if (/^https?:\/\//i.test(link)) {
+      wx.navigateTo({
+        url: `/pages/webview/webview?url=${encodeURIComponent(link)}`
+      })
+      return
+    }
+    // 本地路由：以 / 或 pages/ 开头 → 小程序内跳转
+    const path = link.startsWith('/') ? link : `/${link}`
+    const tabBarPaths = [
+      '/pages/home/home',
+      '/pages/nearby/nearby',
+      '/pages/member-code/member-code',
+      '/pages/records/records',
+      '/pages/profile/profile'
+    ]
+    if (tabBarPaths.indexOf(path) !== -1) {
+      wx.switchTab({ url: path })
+    } else {
+      wx.navigateTo({ url: path })
+    }
   },
 
   // 商城轮播图切换

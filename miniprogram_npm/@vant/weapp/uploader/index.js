@@ -63,8 +63,12 @@ var utils_1 = require("./utils");
     },
     methods: {
         formatFileList: function () {
-            var _a = this.data, _b = _a.fileList, fileList = _b === void 0 ? [] : _b, maxCount = _a.maxCount;
-            var lists = fileList.map(function (item) { return (__assign(__assign({}, item), { isImage: (0, utils_1.isImageFile)(item), isVideo: (0, utils_1.isVideoFile)(item), deletable: (0, validator_1.isBoolean)(item.deletable) ? item.deletable : true })); });
+            var _this = this;
+            var _a = this.data, _b = _a.fileList, fileList = _b === void 0 ? [] : _b, maxCount = _a.maxCount, accept = _a.accept;
+            var lists = fileList.map(function (item) {
+                var isImage = (0, utils_1.isImageFile)(item) || (accept === 'image' && item.url && !(0, utils_1.isVideoFile)(item));
+                return (__assign(__assign({}, item), { isImage: isImage, isVideo: (0, utils_1.isVideoFile)(item), deletable: (0, validator_1.isBoolean)(item.deletable) ? item.deletable : true }));
+            });
             this.setData({ lists: lists, isInCount: lists.length < maxCount });
         },
         getDetail: function (index) {
@@ -134,8 +138,18 @@ var utils_1 = require("./utils");
             var index = event.currentTarget.dataset.index;
             var _a = this.data, lists = _a.lists, showmenu = _a.showmenu;
             var item = lists[index];
+            if (!item || !item.url) {
+                wx.showToast({ title: '预览图片失败', icon: 'none' });
+                return;
+            }
+            var imageUrls = lists
+                .filter(function (i) { return (i.isImage || (i.url && !i.isVideo)); })
+                .map(function (i) { return i.url; })
+                .filter(Boolean);
+            if (imageUrls.length === 0)
+                imageUrls = [item.url];
             wx.previewImage({
-                urls: lists.filter(function (item) { return (0, utils_1.isImageFile)(item); }).map(function (item) { return item.url; }),
+                urls: imageUrls,
                 current: item.url,
                 showmenu: showmenu,
                 fail: function () {

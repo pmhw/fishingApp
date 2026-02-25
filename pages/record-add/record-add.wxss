@@ -1,0 +1,26 @@
+/* pages/record-add/record-add.wxss */
+.container {
+  padding: 24rpx;
+  min-height: 100vh;
+  background: #f5f5f5;
+  box-sizing: border-box;
+}
+
+.upload-section {
+  margin: 24rpx 0;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+}
+
+.upload-label {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.submit-wrap {
+  margin-top: 48rpx;
+  padding: 0 24rpx;
+}

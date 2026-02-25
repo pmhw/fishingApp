@@ -24,8 +24,9 @@
   >
     <swiper-item wx:for="{{bannerList}}" wx:key="id">
       <!-- 普通轮播图 -->
-      <view class="banner-item" wx:if="{{item.type === 'banner'}}">
-        <text class="banner-title">{{item.title}}</text>
+      <view class="banner-item" wx:if="{{item.type === 'banner'}}" bindtap="onBannerTap" data-item="{{item}}">
+        <image class="banner-item-image" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill"></image>
+        <!-- <text class="banner-title">{{item.title}}</text> -->
       </view>
       
       <!-- 排行榜轮播图 -->
@@ -35,7 +36,7 @@
         </view>
         <view class="ranking-list">
           <view 
-            class="ranking-item {{item.rank === 1 ? 'rank-first' : ''}}"
+            class="ranking-item {{rankItem.rank === 1 ? 'rank-first' : ''}}"
             wx:for="{{item.rankings}}" 
             wx:key="rank"
             wx:for-item="rankItem"
@@ -46,6 +47,9 @@
               <text class="rank-spot">{{rankItem.spot}}</text>
             </view>
             <text class="rank-weight">{{rankItem.weight}}</text>
+          </view>
+          <view class="ranking-empty" wx:if="{{!item.rankings || item.rankings.length === 0}}">
+            <text class="ranking-empty-text">暂无数据</text>
           </view>
         </view>
       </view>

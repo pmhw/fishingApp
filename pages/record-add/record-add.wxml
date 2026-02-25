@@ -1,0 +1,36 @@
+<!--pages/record-add/record-add.wxml-->
+<van-nav-bar
+  title="添加垂钓记录"
+  left-arrow
+  bind:click-left="onClickLeft"
+  fixed
+  placeholder
+/>
+<view class="container">
+  <van-cell-group title="基本信息" inset>
+    <van-field value="{{ spotName }}" label="钓场" placeholder="请输入钓场名称" bind:change="onSpotInput" />
+    <van-field value="{{ fishType }}" label="鱼种" placeholder="请输入鱼种" bind:change="onFishInput" />
+    <van-field value="{{ weight }}" label="重量(kg)" type="digit" placeholder="如 2.5" bind:change="onWeightInput" />
+    <van-field value="{{ duration }}" label="时长" placeholder="如 3小时" bind:change="onDurationInput" />
+    <van-field value="{{ remark }}" label="备注" type="textarea" placeholder="选填" bind:change="onRemarkInput" />
+  </van-cell-group>
+
+  <view class="upload-section">
+    <text class="upload-label">照片（选填，点击可预览）</text>
+    <van-uploader
+      file-list="{{ fileList }}"
+      bind:after-read="onAfterRead"
+      bind:delete="onDelete"
+      accept="image"
+      multiple
+      max-count="9"
+      upload-text="上传图片"
+      preview-image
+      preview-full-image
+    />
+  </view>
+
+  <view class="submit-wrap">
+    <van-button type="primary" block round bind:click="onSubmit">保存记录</van-button>
+  </view>
+</view>

@@ -4,13 +4,15 @@
     "pages/nearby/nearby",
     "pages/member-code/member-code",
     "pages/records/records",
+    "pages/record-add/record-add",
     "pages/profile/profile",
     "pages/shop/shop",
     "pages/hotel/hotel",
     "pages/spots/spots",
     "pages/product-detail/product-detail",
     "pages/search/search",
-    "pages/spot-detail/spot-detail"
+    "pages/spot-detail/spot-detail",
+    "pages/webview/webview"
   ],
   "window": {
     "navigationBarTextStyle": "black",
