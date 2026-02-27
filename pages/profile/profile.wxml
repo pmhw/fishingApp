@@ -9,7 +9,7 @@
   />
   
   <!-- 未登录状态 -->
-  <view class="not-logged-in" wx:if="{{!userInfo}}">
+  <view class="not-logged-in" wx:if="{{!userInfo}}" catchtouchmove="true">
     <view class="login-prompt">
       <view class="prompt-icon">🎣</view>
       <text class="prompt-title">您还未登录</text>

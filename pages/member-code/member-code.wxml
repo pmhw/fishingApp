@@ -8,7 +8,7 @@
   />
 
   <!-- 未登录：提示先登录 -->
-  <view class="login-required" wx:if="{{!userInfo}}">
+  <view class="login-required" wx:if="{{!userInfo}}" catchtouchmove="true">
     <view class="login-prompt">
       <text class="prompt-icon">🎣</text>
       <text class="prompt-title">请先登录</text>

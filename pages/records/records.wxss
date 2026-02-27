@@ -1,8 +1,74 @@
 /* pages/records/records.wxss */
+/* 覆盖 app 全局 .container，避免 flex/居中/大 padding 影响本页和登录区 */
 .container {
+  display: block;
+  align-items: stretch;
+  justify-content: flex-start;
   padding: 20rpx;
   background-color: #f5f5f5;
   min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 未登录：请先登录（独立块，不受页面其它样式影响） */
+.login-required {
+  width: 100%;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 40rpx;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+}
+
+.login-required .login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600rpx;
+}
+
+.login-required .prompt-icon {
+  font-size: 100rpx;
+  margin-bottom: 32rpx;
+  line-height: 1;
+}
+
+.login-required .prompt-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+  text-align: center;
+}
+
+.login-required .prompt-desc {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 48rpx;
+  text-align: center;
+}
+
+.login-required .prompt-btn {
+  width: 400rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-required .prompt-btn::after {
+  border: none;
 }
 
 /* 统计信息 */

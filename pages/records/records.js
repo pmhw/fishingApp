@@ -1,6 +1,10 @@
 // pages/records/records.js
+const app = getApp()
+
 Page({
   data: {
+    userInfo: null,
+    showLoginModal: false,
     records: [
       {
         id: 1,
@@ -38,11 +42,33 @@ Page({
   },
 
   onLoad() {
-    console.log('垂钓记录页面加载')
+    this.checkLoginStatus()
   },
 
   onShow() {
-    console.log('垂钓记录页面显示')
+    this.checkLoginStatus()
+  },
+
+  checkLoginStatus() {
+    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
+    this.setData({ userInfo })
+    return !!userInfo
+  },
+
+  onShowLogin() {
+    this.setData({ showLoginModal: true })
+  },
+
+  onLoginSuccess(e) {
+    const { userInfo } = e.detail || {}
+    this.setData({
+      userInfo: userInfo || app.globalData.userInfo,
+      showLoginModal: false
+    })
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false })
   },
 
   // 点击记录
@@ -54,8 +80,12 @@ Page({
     })
   },
 
-  // 添加记录
+  // 添加记录（未登录先提示登录）
   onAddRecord() {
+    if (!this.checkLoginStatus()) {
+      this.onShowLogin()
+      return
+    }
     wx.navigateTo({
       url: '/pages/record-add/record-add'
     })

@@ -9,7 +9,25 @@
   placeholder="{{true}}"
 />
 <view class="container">
-  <!-- 统计信息 -->
+  <login-modal
+    show="{{showLoginModal}}"
+    autoCheck="{{true}}"
+    bind:login="onLoginSuccess"
+    bind:close="onLoginClose"
+  />
+
+  <!-- 未登录：提示先登录 -->
+  <view class="login-required" wx:if="{{!userInfo}}" catchtouchmove="true">
+    <view class="login-prompt">
+      <text class="prompt-icon">🎣</text>
+      <text class="prompt-title">请先登录</text>
+      <text class="prompt-desc">登录后可查看与添加垂钓记录</text>
+      <button class="prompt-btn" bindtap="onShowLogin">立即登录</button>
+    </view>
+  </view>
+
+  <!-- 已登录：统计与记录列表 -->
+  <block wx:else>
   <view class="stats-section">
     <view class="stat-item">
       <text class="stat-value">{{totalRecords}}</text>
@@ -63,4 +81,5 @@
       <text class="empty-tip">快去添加你的第一条记录吧~</text>
     </view>
   </view>
+  </block>
 </view>
