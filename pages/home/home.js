@@ -1,8 +1,11 @@
 // pages/home/home.js
-const { request } = require('../../utils/util.js')
+const { request, getMiniUserInfo, resolveAvatarUrl } = require('../../utils/util.js')
 
 Page({
   data: {
+    // 当前用户（来自 GET /api/mini/user/info），401/403/404 时已清除登录态
+    userInfo: null,
+    displayAvatarUrl: '',
     // 当前地区
     currentRegion: '北京市',
     regionList: ['北京市', '上海市', '广州市', '深圳市', '杭州市'],
@@ -161,6 +164,26 @@ Page({
     this.updateWeatherDisplay()
     this.initWeatherAnimation()
     this.loadBanners()
+    this.loadUserInfo()
+  },
+
+  /** 拉取当前用户信息，用于主页渲染；401/403/404 时 getMiniUserInfo 内部会清除登录态并提示 */
+  loadUserInfo() {
+    const token = wx.getStorageSync('token')
+    if (!token) {
+      this.setData({ userInfo: null, displayAvatarUrl: '' })
+      return
+    }
+    getMiniUserInfo().then((user) => {
+      if (user) {
+        this.setData({
+          userInfo: user,
+          displayAvatarUrl: resolveAvatarUrl(user.avatarUrl || '')
+        })
+      } else {
+        this.setData({ userInfo: null, displayAvatarUrl: '' })
+      }
+    })
   },
 
   /** 将相对路径转为完整图片 URL（接口返回 /storage/... 时需拼接域名） */
@@ -268,6 +291,7 @@ Page({
 
   onShow() {
     console.log('首页显示')
+    this.loadUserInfo()
   },
 
   // 获取定位

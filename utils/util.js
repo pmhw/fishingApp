@@ -16,6 +16,8 @@ const formatNumber = n => {
 
 /**
  * 小程序请求封装
+ * 说明：401/403/404 不会在这里自动清除登录态，避免某个接口异常导致用户被反复退出；
+ * 仅 getMiniUserInfo（获取当前用户）在收到 401/403/404 时会调用 clearLogin，其它接口只 reject 由业务处理。
  * @param {string} path 接口路径，如 api/mini/banners
  * @param {object} options 同 wx.request，method、data 等
  * @returns {Promise}
@@ -136,9 +138,89 @@ function resolveAvatarUrl(url) {
   return trimmed.startsWith('/') ? base + trimmed : base + '/' + trimmed
 }
 
+/**
+ * 清除登录态：token、openid、userInfo，用于 401/403/404 等需重新登录场景
+ */
+function clearLogin() {
+  try {
+    const app = getApp()
+    if (app && app.globalData) {
+      app.globalData.token = null
+      app.globalData.openid = null
+      app.globalData.userInfo = null
+    }
+  } catch (e) {}
+  try {
+    wx.removeStorageSync('token')
+    wx.removeStorageSync('openid')
+    wx.removeStorageSync('userInfo')
+  } catch (e) {}
+}
+
+/**
+ * 获取当前登录用户信息（GET /api/mini/user/info）
+ * 成功：同步到 globalData 与 storage，返回 { nickName, avatarUrl, ... }
+ * 401/403/404：清除登录态并提示，返回 null
+ * @returns {Promise<object|null>}
+ */
+function getMiniUserInfo() {
+  return request('api/mini/user/info', { method: 'GET' })
+    .then((res) => {
+      const code = res && (res.code || res.status)
+      const msg = (res && res.msg) ? res.msg : ''
+      if (code === 401 || code === 403 || code === 404) {
+        clearLogin()
+        wx.showToast({ title: msg || (code === 401 ? '未登录' : code === 403 ? '账号已禁用' : '用户不存在'), icon: 'none' })
+        return null
+      }
+      if (code !== 0 && code !== undefined && code !== null) {
+        return null
+      }
+      const data = res && res.data
+      if (!data) return null
+      const userInfo = {
+        id: data.id,
+        openid: data.openid,
+        nickName: data.nickname || data.nickName || '',
+        avatarUrl: data.avatar || data.avatarUrl || '',
+        gender: data.gender,
+        country: data.country || '',
+        province: data.province || '',
+        city: data.city || '',
+        status: data.status,
+        created_at: data.created_at,
+        updated_at: data.updated_at
+      }
+      try {
+        const app = getApp()
+        if (app && app.globalData) {
+          app.globalData.userInfo = userInfo
+        }
+        wx.setStorageSync('userInfo', userInfo)
+      } catch (e) {}
+      return userInfo
+    })
+    .catch((err) => {
+      const msg = (err && err.message) ? err.message : ''
+      if (msg.indexOf('401') !== -1 || msg.indexOf('未登录') !== -1) {
+        clearLogin()
+        wx.showToast({ title: '未登录', icon: 'none' })
+      } else if (msg.indexOf('403') !== -1 || msg.indexOf('禁用') !== -1) {
+        clearLogin()
+        wx.showToast({ title: '账号已禁用', icon: 'none' })
+      } else if (msg.indexOf('404') !== -1 || msg.indexOf('不存在') !== -1) {
+        clearLogin()
+        wx.showToast({ title: '用户不存在', icon: 'none' })
+      }
+      return null
+    })
+}
+
 module.exports = {
   formatTime,
   request,
   uploadFile,
-  resolveAvatarUrl
+  resolveAvatarUrl,
+  clearLogin,
+  getMiniUserInfo
 }

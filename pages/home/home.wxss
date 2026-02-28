@@ -8,6 +8,40 @@
   box-sizing: border-box;
 }
 
+/* 首页用户信息条（已登录时展示） */
+.home-user-bar {
+  padding: 20rpx 30rpx;
+  background: linear-gradient(135deg, #4a90d9 0%, #5ba3e8 100%);
+}
+.home-user-inner {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+.home-user-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: rgba(255,255,255,0.3);
+}
+.home-user-avatar-placeholder {
+  width: 64rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  text-align: center;
+  font-size: 36rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  flex-shrink: 0;
+}
+.home-user-greeting {
+  font-size: 30rpx;
+  color: #fff;
+  flex: 1;
+}
+
 /* 顶部导航栏 */
 .top-header {
   display: flex;

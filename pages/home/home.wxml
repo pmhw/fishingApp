@@ -12,6 +12,14 @@
 />
 
 <view class="container">
+  <!-- 用户信息（已登录且接口返回成功时展示） -->
+  <view class="home-user-bar" wx:if="{{userInfo}}">
+    <view class="home-user-inner">
+      <image wx:if="{{displayAvatarUrl}}" class="home-user-avatar" src="{{displayAvatarUrl}}" mode="aspectFill" />
+      <text wx:else class="home-user-avatar-placeholder">👤</text>
+      <text class="home-user-greeting">欢迎回来，{{userInfo.nickName || '钓友'}}</text>
+    </view>
+  </view>
   <!-- 轮播图（包含排行榜） -->
   <swiper 
     class="banner-swiper" 
