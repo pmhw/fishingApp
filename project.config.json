@@ -5,7 +5,7 @@
     "ignore": [],
     "include": []
   },
-  "miniprogramRoot": "",  
+  "miniprogramRoot": "",
   "setting": {
     "coverView": true,
     "es6": true,
@@ -42,6 +42,6 @@
     "tabIndent": "auto",
     "tabSize": 2
   },
-  "appid": "wxbaaeb5ce74cb9755",
+  "appid": "wx5e1934c5228abb57",
   "simulatorPluginLibVersion": {}
 }

@@ -1,0 +1,27 @@
+<!-- 使用官方 chooseAvatar + type="nickname" 获取头像和昵称 -->
+<view class="page login-profile">
+  <view class="login-profile__title">完善资料</view>
+  <view class="login-profile__tips">请设置头像与昵称后保存到服务器</view>
+  <view class="login-profile__form">
+    <view class="form-row form-row-avatar">
+      <text class="form-label">头像</text>
+      <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar-img" src="{{formAvatar || defaultAvatarUrl}}" mode="aspectFill" />
+      </button>
+    </view>
+    <view class="form-row">
+      <text class="form-label">昵称</text>
+      <input
+        type="nickname"
+        class="form-input weui-input"
+        placeholder="请输入昵称"
+        value="{{formNickname}}"
+        bindinput="onNicknameInput"
+        bindblur="onNicknameBlur"
+      />
+    </view>
+  </view>
+  <view class="login-profile__button">
+    <button class="btn-primary" bindtap="onSave">保存并完成登录</button>
+  </view>
+</view>

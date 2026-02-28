@@ -1,13 +1,6 @@
 <!--pages/member-code/member-code.wxml-->
 <view class="container">
-  <login-modal
-    show="{{showLoginModal}}"
-    autoCheck="{{true}}"
-    bind:login="onLoginSuccess"
-    bind:close="onLoginClose"
-  />
-
-  <!-- 未登录：提示先登录 -->
+  <!-- 未登录：跳转登录页 -->
   <view class="login-required" wx:if="{{!userInfo}}" catchtouchmove="true">
     <view class="login-prompt">
       <text class="prompt-icon">🎣</text>

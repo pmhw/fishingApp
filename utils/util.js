@@ -22,11 +22,19 @@ const formatNumber = n => {
  */
 function request(path, options = {}) {
   let baseUrl = ''
+  let token = ''
   try {
     const app = getApp()
     baseUrl = (app && app.globalData && app.globalData.apiBaseUrl) || ''
+    token = (app && app.globalData && app.globalData.token) || ''
   } catch (e) {
     console.warn('request: getApp 未就绪', e)
+  }
+  try {
+    // 本地缓存优先，避免全局丢失时无权限
+    token = wx.getStorageSync('token') || token || ''
+  } catch (e) {
+    console.warn('request: 读取本地 token 失败', e)
   }
   if (!baseUrl) {
     console.error('request: apiBaseUrl 未配置，请在 app.js 的 globalData 中设置 apiBaseUrl')
@@ -41,6 +49,7 @@ function request(path, options = {}) {
       data: options.data || {},
       header: {
         'content-type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options.header
       },
       success: (res) => {

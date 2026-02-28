@@ -4,7 +4,7 @@ const app = getApp()
 Page({
   data: {
     userInfo: null,
-    showLoginModal: false,
+    needProfileAuth: false,
     // 用户等级信息
     userLevel: {
       title: '垂钓达人',
@@ -73,20 +73,15 @@ Page({
     this.checkLoginStatus()
   },
 
-  // 获取用户信息
+  // 获取用户信息（仅登录后从全局/缓存读取，不设模拟数据）
   getUserInfo() {
-    // 尝试从全局数据获取
-    if (app.globalData.userInfo) {
+    const token = app.globalData.token || wx.getStorageSync('token')
+    if (!token) return
+    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
+    if (userInfo) {
       this.setData({
-        userInfo: app.globalData.userInfo
-      })
-    } else {
-      // 模拟用户信息
-      this.setData({
-        userInfo: {
-          nickName: '垂钓爱好者',
-          avatarUrl: '/images/avatar.png'
-        }
+        userInfo,
+        needProfileAuth: !userInfo.nickName || !userInfo.avatarUrl
       })
     }
   },
@@ -172,37 +167,35 @@ Page({
     })
   },
 
-  // 检查登录状态
+  // 检查登录状态：必须既有 userInfo 又有有效 token 才算登录成功
   checkLoginStatus() {
-    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
+    const token = app.globalData.token || wx.getStorageSync('token')
+    if (!token) {
+      this.setData({ userInfo: null, needProfileAuth: false })
+      return false
+    }
+    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo') || null
+    const needProfileAuth = !!userInfo && (!userInfo.nickName || !userInfo.avatarUrl)
     this.setData({
-      userInfo: userInfo
+      userInfo,
+      needProfileAuth
     })
     return !!userInfo
   },
 
-  // 显示登录弹窗
+  // 跳转独立登录页（参考 miniprogram-1）
   onShowLogin() {
-    this.setData({
-      showLoginModal: true
-    })
+    wx.navigateTo({ url: '/pages/login/login' })
   },
 
-  // 登录成功回调
-  onLoginSuccess(e) {
-    const { userInfo } = e.detail
-    this.setData({
-      userInfo: userInfo,
-      showLoginModal: false
-    })
-    // 刷新用户信息
-    this.getUserInfo()
+  // 完善头像昵称：跳转到「完善资料」页（chooseAvatar + nickname）
+  onAuthProfile() {
+    const token = app.globalData.token || wx.getStorageSync('token')
+    if (!token) {
+      wx.navigateTo({ url: '/pages/login/login' })
+      return
+    }
+    wx.navigateTo({ url: '/pages/login-profile/login-profile' })
   },
 
-  // 关闭登录弹窗
-  onLoginClose() {
-    this.setData({
-      showLoginModal: false
-    })
-  }
 })

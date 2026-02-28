@@ -4,7 +4,6 @@ const app = getApp()
 Page({
   data: {
     userInfo: null,
-    showLoginModal: false,
     records: [
       {
         id: 1,
@@ -50,25 +49,18 @@ Page({
   },
 
   checkLoginStatus() {
+    const token = app.globalData.token || wx.getStorageSync('token')
+    if (!token) {
+      this.setData({ userInfo: null })
+      return false
+    }
     const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
-    this.setData({ userInfo })
+    this.setData({ userInfo: userInfo || null })
     return !!userInfo
   },
 
   onShowLogin() {
-    this.setData({ showLoginModal: true })
-  },
-
-  onLoginSuccess(e) {
-    const { userInfo } = e.detail || {}
-    this.setData({
-      userInfo: userInfo || app.globalData.userInfo,
-      showLoginModal: false
-    })
-  },
-
-  onLoginClose() {
-    this.setData({ showLoginModal: false })
+    wx.navigateTo({ url: '/pages/login/login' })
   },
 
   // 点击记录

@@ -1,14 +1,6 @@
 <!--pages/profile/profile.wxml-->
 <view class="container">
-  <!-- 登录弹窗组件 -->
-  <login-modal 
-    show="{{showLoginModal}}" 
-    autoCheck="{{true}}"
-    bind:login="onLoginSuccess"
-    bind:close="onLoginClose"
-  />
-  
-  <!-- 未登录状态 -->
+  <!-- 未登录状态：跳转独立登录页（参考 miniprogram-1） -->
   <view class="not-logged-in" wx:if="{{!userInfo}}" catchtouchmove="true">
     <view class="login-prompt">
       <view class="prompt-icon">🎣</view>
@@ -20,6 +12,11 @@
   
   <!-- 已登录状态 -->
   <block wx:else>
+  <!-- 无头像/昵称时展示：授权获取头像昵称 -->
+  <view class="profile-auth-bar" wx:if="{{needProfileAuth}}">
+    <text class="profile-auth-desc">完善头像和昵称，获得更好体验</text>
+    <button class="profile-auth-btn" bindtap="onAuthProfile">授权获取头像昵称</button>
+  </view>
   <!-- 用户信息区域 -->
   <view class="user-section">
     <view class="user-header">
