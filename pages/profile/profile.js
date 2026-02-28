@@ -1,6 +1,6 @@
 // pages/profile/profile.js
 const app = getApp()
-const { resolveAvatarUrl } = require('../../utils/util')
+const { resolveAvatarUrl, getMiniUserInfo } = require('../../utils/util')
 
 Page({
   data: {
@@ -66,27 +66,33 @@ Page({
 
   onLoad() {
     console.log('个人中心页面加载')
-    this.getUserInfo()
+    this.loadUserInfo()
     this.calculatePointsPercent()
   },
 
   onShow() {
     console.log('个人中心页面显示')
-    this.checkLoginStatus()
+    this.loadUserInfo()
   },
 
-  // 获取用户信息（仅登录后从全局/缓存读取，不设模拟数据）
-  getUserInfo() {
-    const token = app.globalData.token || wx.getStorageSync('token')
-    if (!token) return
-    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo')
-    if (userInfo) {
-      this.setData({
-        userInfo,
-        displayAvatarUrl: resolveAvatarUrl(userInfo.avatarUrl || ''),
-        needProfileAuth: !userInfo.nickName || !userInfo.avatarUrl
-      })
+  /** 从 GET /api/mini/user/info 拉取当前用户并渲染；401/403/404 时 getMiniUserInfo 会清登录并返回 null */
+  loadUserInfo() {
+    const token = wx.getStorageSync('token')
+    if (!token) {
+      this.setData({ userInfo: null, displayAvatarUrl: '', needProfileAuth: false })
+      return
     }
+    getMiniUserInfo().then((user) => {
+      if (user) {
+        this.setData({
+          userInfo: user,
+          displayAvatarUrl: resolveAvatarUrl(user.avatarUrl || ''),
+          needProfileAuth: !user.nickName || !user.avatarUrl
+        })
+      } else {
+        this.setData({ userInfo: null, displayAvatarUrl: '', needProfileAuth: false })
+      }
+    })
   },
 
   // 计算积分百分比
@@ -170,21 +176,6 @@ Page({
     })
   },
 
-  // 检查登录状态：必须既有 userInfo 又有有效 token 才算登录成功
-  checkLoginStatus() {
-    const token = app.globalData.token || wx.getStorageSync('token')
-    if (!token) {
-      this.setData({ userInfo: null, needProfileAuth: false })
-      return false
-    }
-    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo') || null
-    const needProfileAuth = !!userInfo && (!userInfo.nickName || !userInfo.avatarUrl)
-    this.setData({
-      userInfo,
-      needProfileAuth
-    })
-    return !!userInfo
-  },
 
   // 跳转独立登录页（参考 miniprogram-1）
   onShowLogin() {

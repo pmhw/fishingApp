@@ -108,6 +108,13 @@
   margin-right: 15rpx;
 }
 
+.user-region {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
 .level-badge {
   display: flex;
   align-items: center;

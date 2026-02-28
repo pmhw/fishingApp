@@ -29,12 +29,13 @@
         </view>
         <view class="user-info">
           <view class="user-title-row">
-            <text class="user-title">{{userLevel.title}}</text>
+            <text class="user-title">{{userInfo.nickName || '钓友'}}</text>
             <view class="level-badge">
               <text class="level-icon">👑</text>
               <text class="level-text">{{userLevel.level}}</text>
             </view>
           </view>
+          <text class="user-region" wx:if="{{userInfo.province || userInfo.city}}">{{userInfo.province}}{{userInfo.city}}</text>
           <!-- 积分进度条 -->
           <view class="points-progress">
             <view class="progress-label">
