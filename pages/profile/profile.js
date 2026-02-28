@@ -1,9 +1,11 @@
 // pages/profile/profile.js
 const app = getApp()
+const { resolveAvatarUrl } = require('../../utils/util')
 
 Page({
   data: {
     userInfo: null,
+    displayAvatarUrl: '', // 展示用：拼接域名后的头像地址
     needProfileAuth: false,
     // 用户等级信息
     userLevel: {
@@ -81,6 +83,7 @@ Page({
     if (userInfo) {
       this.setData({
         userInfo,
+        displayAvatarUrl: resolveAvatarUrl(userInfo.avatarUrl || ''),
         needProfileAuth: !userInfo.nickName || !userInfo.avatarUrl
       })
     }

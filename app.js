@@ -17,6 +17,8 @@ App({
     userInfo: null,
     globalSystemInfo: null, // navBar组件需要的全局系统信息
     apiBaseUrl: 'https://fishing.kaiyuantong.cn',
+    /** 静态资源（头像等）展示时拼接的域名，不配置则用 apiBaseUrl */
+    staticBaseUrl: 'https://fishing.kaiyuantong.cn',
     /** 全局购物车 [{ id, name, price, image, quantity }] */
     cart: []
   }

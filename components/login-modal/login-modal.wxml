@@ -45,7 +45,7 @@
       <view class="form-row form-row-avatar">
         <text class="form-label">头像</text>
         <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-          <image class="avatar-preview" src="{{formAvatar || defaultAvatarUrl}}" mode="aspectFill" />
+          <image class="avatar-preview" src="{{formAvatarDisplay || defaultAvatarUrl}}" mode="aspectFill" />
         </button>
       </view>
       <view class="form-row">

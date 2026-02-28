@@ -69,7 +69,76 @@ function request(path, options = {}) {
   })
 }
 
+/**
+ * 上传本地临时文件到服务器（如 chooseAvatar 返回的临时路径）
+ * @param {string} filePath 本地临时文件路径，如 http://tmp/xxx.jpeg
+ * @returns {Promise<string>} 上传成功后返回文件 URL
+ */
+function uploadFile(filePath) {
+  let baseUrl = ''
+  let token = ''
+  try {
+    const app = getApp()
+    baseUrl = (app && app.globalData && app.globalData.apiBaseUrl) || ''
+    token = (app && app.globalData && app.globalData.token) || ''
+  } catch (e) {}
+  try {
+    token = wx.getStorageSync('token') || token || ''
+  } catch (e) {}
+  if (!baseUrl) {
+    return Promise.reject(new Error('apiBaseUrl 未配置'))
+  }
+  const url = baseUrl.replace(/\/$/, '') + '/api/mini/upload'
+  return new Promise((resolve, reject) => {
+    wx.uploadFile({
+      url,
+      filePath,
+      name: 'file',
+      header: token ? { Authorization: `Bearer ${token}` } : {},
+      success: (res) => {
+        try {
+          const data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data
+          if (res.statusCode >= 200 && res.statusCode < 300 && data && data.url) {
+            resolve(data.url)
+          } else {
+            reject(new Error((data && data.msg) || '上传失败'))
+          }
+        } catch (e) {
+          reject(e)
+        }
+      },
+      fail: reject
+    })
+  })
+}
+
+/**
+ * 展示头像时拼接配置的域名（后端若只存相对路径如 /uploads/xxx.jpeg，需拼成完整 URL）
+ * @param {string} url 头像地址，可为相对路径或完整 URL
+ * @returns {string} 用于 <image src=""> 的完整地址
+ */
+function resolveAvatarUrl(url) {
+  if (!url || typeof url !== 'string') return ''
+  const trimmed = url.trim()
+  if (!trimmed) return ''
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
+    return trimmed
+  }
+  let base = ''
+  try {
+    const app = getApp()
+    base = (app && app.globalData && app.globalData.staticBaseUrl) ||
+      (app && app.globalData && app.globalData.apiBaseUrl) ||
+      ''
+  } catch (e) {}
+  base = (base || '').replace(/\/$/, '')
+  if (!base) return trimmed
+  return trimmed.startsWith('/') ? base + trimmed : base + '/' + trimmed
+}
+
 module.exports = {
   formatTime,
-  request
+  request,
+  uploadFile,
+  resolveAvatarUrl
 }

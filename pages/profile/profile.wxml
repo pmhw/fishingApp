@@ -23,7 +23,8 @@
       <view class="user-main" bindtap="onUserInfoTap">
         <view class="user-avatar">
           <view class="avatar-border">
-            <text class="avatar-icon">🎣</text>
+            <image wx:if="{{displayAvatarUrl}}" class="avatar-img" src="{{displayAvatarUrl}}" mode="aspectFill" />
+            <text wx:else class="avatar-icon">🎣</text>
           </view>
         </view>
         <view class="user-info">

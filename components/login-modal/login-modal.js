@@ -1,6 +1,11 @@
 // components/login-modal/login-modal.js
 const app = getApp()
-const { request } = require('../../utils/util')
+const { request, uploadFile, resolveAvatarUrl } = require('../../utils/util')
+
+function isTempFilePath(path) {
+  if (!path || typeof path !== 'string') return false
+  return path.startsWith('http://tmp/') || path.startsWith('wxfile://')
+}
 
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 
@@ -23,6 +28,7 @@ Component({
     step: 1,
     formNickname: '',
     formAvatar: '',
+    formAvatarDisplay: '',
     defaultAvatarUrl,
     formGender: null,
     formCountry: '',
@@ -41,7 +47,7 @@ Component({
   observers: {
     'show'(newVal) {
       if (newVal) {
-        this.setData({ step: 1, formNickname: '', formAvatar: '', formGender: null, formCountry: '', formProvince: '', formCity: '' })
+        this.setData({ step: 1, formNickname: '', formAvatar: '', formAvatarDisplay: '', formGender: null, formCountry: '', formProvince: '', formCity: '' })
         if (this.properties.autoCheck) this.checkLoginStatus()
       }
     }
@@ -109,10 +115,12 @@ Component({
                 this.close()
                 wx.showToast({ title: '登录成功', icon: 'success' })
               } else {
+                const avatar = serverUser.avatar || ''
                 this.setData({
                   step: 2,
                   formNickname: serverUser.nickname || '',
-                  formAvatar: serverUser.avatar || '',
+                  formAvatar: avatar,
+                  formAvatarDisplay: resolveAvatarUrl(avatar) || defaultAvatarUrl,
                   formGender: serverUser.gender,
                   formCountry: serverUser.country || '',
                   formProvince: serverUser.province || '',
@@ -134,9 +142,28 @@ Component({
     },
 
     onChooseAvatar(e) {
-      const { avatarUrl } = e.detail || {}
+      const avatarUrl = (e && e.detail && e.detail.avatarUrl) ? e.detail.avatarUrl : ''
       if (!avatarUrl) return
-      this.setData({ formAvatar: avatarUrl })
+      const setAvatar = (url) => {
+        this.setData({
+          formAvatar: url,
+          formAvatarDisplay: resolveAvatarUrl(url) || defaultAvatarUrl
+        })
+      }
+      if (isTempFilePath(avatarUrl)) {
+        wx.showLoading({ title: '上传中...' })
+        uploadFile(avatarUrl)
+          .then((url) => {
+            wx.hideLoading()
+            setAvatar(url)
+          })
+          .catch((err) => {
+            wx.hideLoading()
+            wx.showToast({ title: '头像上传失败，请重试', icon: 'none' })
+          })
+      } else {
+        setAvatar(avatarUrl)
+      }
     },
 
     onFormNicknameInput(e) {
@@ -145,7 +172,7 @@ Component({
 
     // 保存昵称、头像等到服务器并完成登录
     onSaveProfile() {
-      const { formNickname, formAvatar } = this.data
+      const { formNickname, formAvatar, formGender, formCountry, formProvince, formCity } = this.data
       const nick = (formNickname && formNickname.trim()) || ''
       if (!nick) {
         wx.showToast({ title: '请填写昵称', icon: 'none' })
@@ -155,27 +182,25 @@ Component({
         wx.showToast({ title: '请点击头像选择头像', icon: 'none' })
         return
       }
-      wx.showLoading({ title: '保存中...' })
-      request('api/mini/user/profile', {
-        method: 'PUT',
-        data: {
-          nickname: nick,
-          avatar: formAvatar,
-          gender: this.data.formGender,
-          country: this.data.formCountry || '',
-          province: this.data.formProvince || '',
-          city: this.data.formCity || ''
-        }
-      })
-        .then(() => {
-          wx.hideLoading()
+      const saveProfile = (avatarUrl) => {
+        return request('api/mini/user/profile', {
+          method: 'PUT',
+          data: {
+            nickname: nick,
+            avatar: avatarUrl,
+            gender: formGender,
+            country: formCountry || '',
+            province: formProvince || '',
+            city: formCity || ''
+          }
+        }).then(() => {
           const userInfo = {
             nickName: nick,
-            avatarUrl: this.data.formAvatar,
-            gender: this.data.formGender,
-            country: this.data.formCountry || '',
-            province: this.data.formProvince || '',
-            city: this.data.formCity || ''
+            avatarUrl: avatarUrl,
+            gender: formGender,
+            country: formCountry || '',
+            province: formProvince || '',
+            city: formCity || ''
           }
           app.globalData.userInfo = userInfo
           wx.setStorageSync('userInfo', userInfo)
@@ -184,11 +209,26 @@ Component({
           this.close()
           wx.showToast({ title: '保存成功，登录完成', icon: 'success' })
         })
-        .catch((err) => {
-          wx.hideLoading()
-          console.error('更新资料失败', err)
-          wx.showToast({ title: '保存失败，请重试', icon: 'none' })
-        })
+      }
+      if (isTempFilePath(formAvatar)) {
+        wx.showLoading({ title: '上传头像中...' })
+        uploadFile(formAvatar)
+          .then((url) => {
+            wx.showLoading({ title: '保存中...' })
+            return saveProfile(url)
+          })
+          .then(() => wx.hideLoading())
+          .catch((err) => {
+            wx.hideLoading()
+            wx.showToast({ title: '保存失败，请重试', icon: 'none' })
+          })
+        return
+      }
+      wx.showLoading({ title: '保存中...' })
+      saveProfile(formAvatar).then(() => wx.hideLoading()).catch((err) => {
+        wx.hideLoading()
+        wx.showToast({ title: '保存失败，请重试', icon: 'none' })
+      })
     },
 
     // 关闭弹窗
