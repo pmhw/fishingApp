@@ -1,29 +1,17 @@
 <!--pages/home/home.wxml-->
-<!-- 自定义导航栏 -->
+<!-- 自定义导航栏：上行显示地区，下行用来选择钓场 -->
 <nav-bar 
   searchBar="{{true}}"
   showaw="{{true}}"
   address="{{currentRegion}}"
-  weather="{{weatherDisplay}}"
+  weather="{{currentStore && currentStore.name ? currentStore.name : '选择钓场'}}"
   searchText="搜索商品、钓场..."
   background="rgba(255, 255, 255, 0.95)"
   bind:search="onSearch"
-  bind:weather="onWeatherTap"
+  bind:weather="onStoreBarTap"
 />
 
 <view class="container">
-  <!-- 当前门店：点击可切换门店 -->
-  <view class="home-store-bar" bindtap="onStoreBarTap">
-    <view class="home-store-left">
-      <text class="home-store-label">当前门店</text>
-      <text class="home-store-name">{{currentStore && currentStore.name ? currentStore.name : '请选择门店'}}</text>
-    </view>
-    <view class="home-store-right">
-      <text class="home-store-change-text">切换</text>
-      <text class="home-store-arrow">›</text>
-    </view>
-  </view>
-
   <!-- 用户信息：悬浮弹出，约 2.5 秒后自动消失 -->
   <view wx:if="{{userInfo}}" class="home-user-bar-wrap {{showUserBar ? '' : 'home-user-bar-wrap--hide'}}">
     <view class="home-user-bar">

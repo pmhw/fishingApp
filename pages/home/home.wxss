@@ -1391,3 +1391,45 @@
   color: #667eea;
   font-weight: bold;
 }
+
+/* 导航栏右侧门店选择 */
+.navbar-right-store {
+  display: flex;
+  align-items: center;
+  padding: 4rpx 10rpx;
+  border-radius: 30rpx;
+  background-color: #f5f5f5;
+}
+
+.navbar-right-store-icon {
+  font-size: 26rpx;
+  margin-right: 6rpx;
+}
+
+.navbar-right-store-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 180rpx;
+}
+
+.navbar-right-store-label {
+  font-size: 20rpx;
+  color: #999;
+  line-height: 26rpx;
+}
+
+.navbar-right-store-name {
+  max-width: 180rpx;
+  font-size: 22rpx;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-right-store-arrow {
+  margin-left: 4rpx;
+  font-size: 22rpx;
+  color: #999;
+}

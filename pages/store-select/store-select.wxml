@@ -1,7 +1,21 @@
 <view class="store-page">
   <view class="store-header">
-    <text class="store-title">选择门店</text>
-    <text class="store-subtitle">不同门店商品与钓位不同，请先选择门店</text>
+    <text class="store-title">选择钓场</text>
+    <text class="store-subtitle">不同钓场商品与钓位不同，请先选择钓场</text>
+    <view class="store-city-bar">
+      <text class="store-city-label">城市</text>
+      <view class="store-city-chip-list">
+        <view
+          class="store-city-chip {{item === currentCity ? 'store-city-chip--active' : ''}}"
+          wx:for="{{cityList}}"
+          wx:key="*this"
+          data-city="{{item}}"
+          bindtap="onCitySelect"
+        >
+          <text class="store-city-chip-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
   </view>
 
   <view class="store-list" wx:if="{{storeList.length}}">
@@ -12,14 +26,30 @@
       bindtap="onSelectStore"
       data-store="{{item}}"
     >
+      <view class="store-item-cover">
+        <image
+          class="store-item-cover-img"
+          src="{{item.cover_image_resolved}}"
+          mode="aspectFill"
+        />
+      </view>
       <view class="store-item-main">
         <view class="store-item-title-row">
           <text class="store-item-name">{{item.name}}</text>
-          <text class="store-item-tag" wx:if="{{item.is_recommend}}">推荐</text>
-          <text class="store-item-tag store-item-tag-status" wx:if="{{item.is_open === false}}">未营业</text>
+          <text class="store-item-tag" wx:if="{{item.price_info}}">{{item.price_info}}</text>
         </view>
-        <text class="store-item-distance" wx:if="{{item.distance}}">{{item.distance}}</text>
+        <text class="store-item-distance" wx:if="{{item.city || item.district}}">
+          {{item.city}}{{item.district}}
+        </text>
         <text class="store-item-address">{{item.address}}</text>
+        <view class="store-item-tags" wx:if="{{item.facilities}}">
+          <text
+            class="store-item-facility-tag"
+            wx:for="{{item.facilities.split('、')}}"
+            wx:key="*this"
+            wx:for-item="fac"
+          >{{fac}}</text>
+        </view>
       </view>
       <view class="store-item-right">
         <text class="store-item-current" wx:if="{{currentStoreId === item.id}}">当前</text>
