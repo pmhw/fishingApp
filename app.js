@@ -19,6 +19,8 @@ App({
     apiBaseUrl: 'https://fishing.kaiyuantong.cn',
     /** 静态资源（头像等）展示时拼接的域名，不配置则用 apiBaseUrl */
     staticBaseUrl: 'https://fishing.kaiyuantong.cn',
+    /** 当前选中的门店（用于商品、钓位等按门店展示） */
+    currentStore: null,
     /** 全局购物车 [{ id, name, price, image, quantity }] */
     cart: []
   }

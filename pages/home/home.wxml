@@ -12,29 +12,49 @@
 />
 
 <view class="container">
-  <!-- 用户信息（已登录且接口返回成功时展示） -->
-  <view class="home-user-bar" wx:if="{{userInfo}}">
-    <view class="home-user-inner">
-      <image wx:if="{{displayAvatarUrl}}" class="home-user-avatar" src="{{displayAvatarUrl}}" mode="aspectFill" />
-      <text wx:else class="home-user-avatar-placeholder">👤</text>
-      <text class="home-user-greeting">欢迎回来，{{userInfo.nickName || '钓友'}}</text>
+  <!-- 当前门店：点击可切换门店 -->
+  <view class="home-store-bar" bindtap="onStoreBarTap">
+    <view class="home-store-left">
+      <text class="home-store-label">当前门店</text>
+      <text class="home-store-name">{{currentStore && currentStore.name ? currentStore.name : '请选择门店'}}</text>
+    </view>
+    <view class="home-store-right">
+      <text class="home-store-change-text">切换</text>
+      <text class="home-store-arrow">›</text>
     </view>
   </view>
-  <!-- 轮播图（包含排行榜） -->
+
+  <!-- 用户信息：悬浮弹出，约 2.5 秒后自动消失 -->
+  <view wx:if="{{userInfo}}" class="home-user-bar-wrap {{showUserBar ? '' : 'home-user-bar-wrap--hide'}}">
+    <view class="home-user-bar">
+      <view class="home-user-inner">
+        <image wx:if="{{displayAvatarUrl}}" class="home-user-avatar" src="{{displayAvatarUrl}}" mode="aspectFill" />
+        <text wx:else class="home-user-avatar-placeholder">👤</text>
+        <text class="home-user-greeting">欢迎回来，{{userInfo.nickName || '钓友'}}</text>
+      </view>
+    </view>
+  </view>
+  <!-- 轮播图（包含排行榜）：加载中显示骨架，避免空白 -->
+  <block wx:if="{{bannerLoading && bannerList.length === 0}}">
+    <view class="banner-skeleton">
+      <view class="banner-skeleton__shimmer"></view>
+      <text class="banner-skeleton__text">加载中...</text>
+    </view>
+  </block>
   <swiper 
+    wx:else
     class="banner-swiper" 
-    indicator-dots="{{true}}" 
-    autoplay="{{true}}" 
+    indicator-dots="{{bannerList.length > 0}}" 
+    autoplay="{{bannerList.length > 0}}" 
     interval="4000" 
     duration="500" 
     bindchange="onBannerChange"
-    circular="{{true}}"
+    circular="{{bannerList.length > 1}}"
   >
     <swiper-item wx:for="{{bannerList}}" wx:key="id">
       <!-- 普通轮播图 -->
       <view class="banner-item" wx:if="{{item.type === 'banner'}}" bindtap="onBannerTap" data-item="{{item}}">
         <image class="banner-item-image" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill"></image>
-        <!-- <text class="banner-title">{{item.title}}</text> -->
       </view>
       
       <!-- 排行榜轮播图 -->

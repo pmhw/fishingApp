@@ -160,17 +160,15 @@ function clearLogin() {
 /**
  * 获取当前登录用户信息（GET /api/mini/user/info）
  * 成功：同步到 globalData 与 storage，返回 { nickName, avatarUrl, ... }
- * 401/403/404：清除登录态并提示，返回 null
+ * 401/403/404 或失败：仅返回 null，不清理登录态（避免接口异常或测试时被反复踢出）
+ * 需要主动清登录时请调用 clearLogin()
  * @returns {Promise<object|null>}
  */
 function getMiniUserInfo() {
   return request('api/mini/user/info', { method: 'GET' })
     .then((res) => {
       const code = res && (res.code || res.status)
-      const msg = (res && res.msg) ? res.msg : ''
       if (code === 401 || code === 403 || code === 404) {
-        clearLogin()
-        wx.showToast({ title: msg || (code === 401 ? '未登录' : code === 403 ? '账号已禁用' : '用户不存在'), icon: 'none' })
         return null
       }
       if (code !== 0 && code !== undefined && code !== null) {
@@ -200,18 +198,7 @@ function getMiniUserInfo() {
       } catch (e) {}
       return userInfo
     })
-    .catch((err) => {
-      const msg = (err && err.message) ? err.message : ''
-      if (msg.indexOf('401') !== -1 || msg.indexOf('未登录') !== -1) {
-        clearLogin()
-        wx.showToast({ title: '未登录', icon: 'none' })
-      } else if (msg.indexOf('403') !== -1 || msg.indexOf('禁用') !== -1) {
-        clearLogin()
-        wx.showToast({ title: '账号已禁用', icon: 'none' })
-      } else if (msg.indexOf('404') !== -1 || msg.indexOf('不存在') !== -1) {
-        clearLogin()
-        wx.showToast({ title: '用户不存在', icon: 'none' })
-      }
+    .catch(() => {
       return null
     })
 }

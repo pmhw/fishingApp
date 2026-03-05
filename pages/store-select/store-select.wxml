@@ -1,0 +1,35 @@
+<view class="store-page">
+  <view class="store-header">
+    <text class="store-title">选择门店</text>
+    <text class="store-subtitle">不同门店商品与钓位不同，请先选择门店</text>
+  </view>
+
+  <view class="store-list" wx:if="{{storeList.length}}">
+    <view
+      class="store-item"
+      wx:for="{{storeList}}"
+      wx:key="id"
+      bindtap="onSelectStore"
+      data-store="{{item}}"
+    >
+      <view class="store-item-main">
+        <view class="store-item-title-row">
+          <text class="store-item-name">{{item.name}}</text>
+          <text class="store-item-tag" wx:if="{{item.is_recommend}}">推荐</text>
+          <text class="store-item-tag store-item-tag-status" wx:if="{{item.is_open === false}}">未营业</text>
+        </view>
+        <text class="store-item-distance" wx:if="{{item.distance}}">{{item.distance}}</text>
+        <text class="store-item-address">{{item.address}}</text>
+      </view>
+      <view class="store-item-right">
+        <text class="store-item-current" wx:if="{{currentStoreId === item.id}}">当前</text>
+        <text class="store-item-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="store-empty" wx:if="{{!loading && !storeList.length}}">
+    <text class="store-empty-text">暂无门店数据</text>
+  </view>
+</view>
+

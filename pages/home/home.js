@@ -6,6 +6,9 @@ Page({
     // 当前用户（来自 GET /api/mini/user/info），401/403/404 时已清除登录态
     userInfo: null,
     displayAvatarUrl: '',
+    showUserBar: false, // 悬浮用户条是否显示，true 后约 2.5s 自动置为 false
+    // 当前门店（从全局或本地缓存恢复）
+    currentStore: null,
     // 当前地区
     currentRegion: '北京市',
     regionList: ['北京市', '上海市', '广州市', '深圳市', '杭州市'],
@@ -158,6 +161,7 @@ Page({
 
   onLoad() {
     console.log('首页加载')
+    this.loadCurrentStore()
     this.getLocation()
     this.getWeather()
     this.checkIcons()
@@ -165,6 +169,27 @@ Page({
     this.initWeatherAnimation()
     this.loadBanners()
     this.loadUserInfo()
+  },
+
+  // 恢复当前门店信息（从全局 / 本地缓存）
+  loadCurrentStore() {
+    const app = getApp()
+    let store = (app.globalData && app.globalData.currentStore) || null
+    if (!store) {
+      try {
+        store = wx.getStorageSync('currentStore') || null
+      } catch (e) {
+        store = null
+      }
+    }
+    if (store) {
+      if (app.globalData) {
+        app.globalData.currentStore = store
+      }
+      this.setData({ currentStore: store })
+    } else {
+      this.setData({ currentStore: null })
+    }
   },
 
   /** 拉取当前用户信息，用于主页渲染；401/403/404 时 getMiniUserInfo 内部会清除登录态并提示 */
@@ -178,10 +203,16 @@ Page({
       if (user) {
         this.setData({
           userInfo: user,
-          displayAvatarUrl: resolveAvatarUrl(user.avatarUrl || '')
+          displayAvatarUrl: resolveAvatarUrl(user.avatarUrl || ''),
+          showUserBar: true
         })
+        if (this._userBarTimer) clearTimeout(this._userBarTimer)
+        this._userBarTimer = setTimeout(() => {
+          this.setData({ showUserBar: false })
+          this._userBarTimer = null
+        }, 2500)
       } else {
-        this.setData({ userInfo: null, displayAvatarUrl: '' })
+        this.setData({ userInfo: null, displayAvatarUrl: '', showUserBar: false })
       }
     })
   },
@@ -291,7 +322,15 @@ Page({
 
   onShow() {
     console.log('首页显示')
+    this.loadCurrentStore()
     this.loadUserInfo()
+  },
+
+  onUnload() {
+    if (this._userBarTimer) {
+      clearTimeout(this._userBarTimer)
+      this._userBarTimer = null
+    }
   },
 
   // 获取定位
@@ -660,5 +699,12 @@ Page({
       icon: 'none'
     })
     // 这里可以显示天气详情或跳转到天气页面
+  },
+
+  // 点击门店条：进入门店选择页
+  onStoreBarTap() {
+    wx.navigateTo({
+      url: '/pages/store-select/store-select'
+    })
   }
 })
