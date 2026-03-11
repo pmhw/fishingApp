@@ -1005,6 +1005,18 @@
   color: #999;
 }
 
+.test-pay-btn {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  color: #ffffff;
+  font-size: 30rpx;
+  text-align: center;
+  border: none;
+}
+
 /* 商城推荐 */
 .shop-swiper {
   width: 100%;

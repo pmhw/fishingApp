@@ -1,5 +1,5 @@
 // pages/home/home.js
-const { request, getMiniUserInfo, resolveAvatarUrl } = require('../../utils/util.js')
+const { request, getMiniUserInfo, resolveAvatarUrl, payWithWechatJsapi } = require('../../utils/util.js')
 
 Page({
   data: {
@@ -699,6 +699,28 @@ Page({
       icon: 'none'
     })
     // 这里可以显示天气详情或跳转到天气页面
+  },
+
+  // 测试 0.1 元支付
+  onTestPay() {
+    const orderNo = 'TEST' + Date.now()
+    // 0.1 元 = 10 分
+    payWithWechatJsapi({
+      order_no: orderNo,
+      description: '测试支付 0.1 元',
+      total_fee: 10
+    })
+      .then((result) => {
+        if (result === 'success') {
+          wx.showToast({ title: '支付成功', icon: 'success' })
+        } else if (result === 'cancel') {
+          wx.showToast({ title: '已取消支付', icon: 'none' })
+        }
+      })
+      .catch((err) => {
+        console.error('测试支付失败', err)
+        wx.showToast({ title: '支付失败', icon: 'none' })
+      })
   },
 
   // 点击门店条：进入门店选择页

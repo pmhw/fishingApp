@@ -133,6 +133,11 @@
     </view>
   </view>
 
+  <!-- 测试支付按钮（仅测试环境使用） -->
+  <view class="section">
+    <button class="test-pay-btn" bindtap="onTestPay">测试支付 0.1 元</button>
+  </view>
+
   <!-- 功能入口 -->
   <view class="function-entry">
     <view 

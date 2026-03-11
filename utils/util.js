@@ -203,11 +203,58 @@ function getMiniUserInfo() {
     })
 }
 
+/**
+ * 小程序端统一微信支付调用
+ * 调用 POST /api/mini/pay/wechat/jsapi，拿到参数后调起 wx.requestPayment
+ * @param {Object} payload { order_no, description, total_fee }
+ * @returns {Promise<'success' | 'fail' | 'cancel'>}
+ */
+function payWithWechatJsapi(payload) {
+  const { order_no, description, total_fee } = payload || {}
+  if (!order_no || !total_fee) {
+    return Promise.reject(new Error('缺少订单号或金额'))
+  }
+  return request('api/mini/pay/wechat/jsapi', {
+    method: 'POST',
+    data: {
+      order_no,
+      description: description || '',
+      total_fee
+    }
+  }).then((res) => {
+    const data = res && res.data ? res.data : res
+    if (!data) {
+      throw new Error('支付参数为空')
+    }
+    return new Promise((resolve, reject) => {
+      wx.requestPayment({
+        timeStamp: String(data.timeStamp || data.timestamp || ''),
+        nonceStr: data.nonceStr || data.nonce_str || '',
+        package: data.package || '',
+        signType: data.signType || data.sign_type || 'MD5',
+        paySign: data.paySign || data.pay_sign || '',
+        success() {
+          resolve('success')
+        },
+        fail(err) {
+          const msg = (err && err.errMsg) || ''
+          if (msg.indexOf('cancel') !== -1 || msg.indexOf('fail cancel') !== -1) {
+            resolve('cancel')
+          } else {
+            reject(err)
+          }
+        }
+      })
+    })
+  })
+}
+
 module.exports = {
   formatTime,
   request,
   uploadFile,
   resolveAvatarUrl,
   clearLogin,
-  getMiniUserInfo
+  getMiniUserInfo,
+  payWithWechatJsapi
 }
